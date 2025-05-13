@@ -43,7 +43,7 @@
                     </ul>
                 </div>
                 </div>
-                <div class="feature-card" style="flex-direction: row-reverse; background-color: var(--primary-light);">
+                <div class="feature-card" style="flex-direction: row-reverse; background-color: var(--color-background-mute);">
                 <i class="ri-line-chart-line feature-icon"></i>
                 <div>
                     <h3>Аналитика и визуализация</h3>
@@ -64,7 +64,7 @@
                     </ul>
                 </div>
                 </div>
-                <div class="feature-card" style="flex-direction: row-reverse; background-color: var(--primary-light);">
+                <div class="feature-card" style="flex-direction: row-reverse; background-color: var(--color-background-mute);">
                 <i class="ri-group-line feature-icon"></i>
                 <div>
                     <h3>Совместное использование</h3>

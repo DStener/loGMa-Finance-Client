@@ -14,21 +14,21 @@
             </div>
 
             <div class="header-right">
-                <button class="theme-toggle" @click="toggleTheme" aria-label="Toggle theme">
+                <button class="theme-toggle" :class="{ 'white-icon': isMenuOpen }" @click="toggleTheme" aria-label="Toggle theme">
                     <i :class="themeIcon"></i>
                 </button>
 
-                <router-link v-if="isAuth === 1" to="/profile" class="user-profile">
+                <router-link v-if="isAuth === 1" to="/profile" class="user-profile" :class="{ 'white-icon': isMenuOpen }">
                     <img v-if="userAvatar" :src="userAvatar" alt="User avatar" class="avatar" />
                     <i v-else class="ri-user-line"></i>
                 </router-link>
-                <router-link v-else to="/auth" class="auth-btn">
+                <router-link v-else to="/auth" class="auth-btn" :class="{ 'white-icon': isMenuOpen }">
                     <i class="ri-login-box-line"></i>
                 </router-link>
             </div>
 
             <nav class="nav" :class="{ show: isMenuOpen }">
-                <router-link to="/welcome" class="nav-link">
+                <router-link to="/" class="nav-link">
                     <i class="ri-home-4-line"></i> Главная
                 </router-link>
                 <router-link to="/history" class="nav-link">
@@ -81,12 +81,52 @@ export default {
             return this.isMenuOpen ? 'ri-close-line' : 'ri-menu-line'
         }
     },
+
+    // Set saved theme color 
+    mounted: function() {
+        if(localStorage.getItem("isDark")  === "false") {
+            document.documentElement.classList.remove("dark")
+            document.documentElement.classList.add("light")
+            this.isDarkTheme = false;
+        } else {
+            document.documentElement.classList.remove("light")
+            document.documentElement.classList.add("dark")
+            this.isDarkTheme = true;
+        }
+    },
+
     methods: {
         toggleMenu() {
             this.isMenuOpen = !this.isMenuOpen
         },
+
         toggleTheme() {
-            this.isDarkTheme = !this.isDarkTheme
+
+            if(localStorage.getItem("isDark") != null) {
+                if(localStorage.getItem("isDark")  === "true") {
+                    document.documentElement.classList.remove("dark")
+                    document.documentElement.classList.add("light")
+                    localStorage.setItem('isDark', "false");
+                    this.isDarkTheme = false;
+                } else {
+                    document.documentElement.classList.remove("light")
+                    document.documentElement.classList.add("dark")
+                    localStorage.setItem('isDark', "true");
+                    this.isDarkTheme = true;
+                }
+                return;
+            }
+
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.documentElement.classList.add("dark")
+                localStorage.setItem('isDark', "true")
+                this.isDarkTheme = true;
+            } else {
+                document.documentElement.classList.add("light")
+                localStorage.setItem('isDark', "false")
+                this.isDarkTheme = false;
+            }
+            
         },
         handleAddExpense() {
             this.$emit('add-expense')

@@ -37,14 +37,15 @@
     border: 1px solid #11111157;
     border-radius: 8px;
     font-size: 1rem;
-    background-color: var(--bg-dark);
+    background-color: var(--color-background-mute);
+    color: var(--color-text);
 }
 
 .btn-submit {
     width: 100%;
     padding: 9px;
     background-color: var(--primary-dark);
-    color: var(--text-dark);
+    color: whitesmoke;
     border: none;
     border-radius: 8px;
     font-weight: 600;

@@ -1,6 +1,5 @@
 .welcome-page {
-    background-color: var(--bg-light);
-    color: var(--text-dark);
+    color: var(--color-text);
 }
 
 .first-section {
@@ -61,7 +60,7 @@
 
 /* Sections */
 .card {
-    background: var(--card-bg);
+    background: var(--color-background-soft);
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
     padding: 1.5rem;
@@ -111,7 +110,7 @@
 }
 
 .feature-card {
-    background: var(--card-bg);
+    background: var(--color-background-soft);
     border-radius: var(--border-radius);
     padding: 1.4rem;
     box-shadow: var(--box-shadow);

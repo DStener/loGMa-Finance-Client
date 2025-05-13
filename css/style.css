@@ -9,8 +9,8 @@
   --bg-light: #F9FBF8;
   --bg-dark: #1E262C;
   --card-bg: #FFFFFF;
-  --border-radius: 16px;
-  --box-shadow: 0 4px 12px rgb(0, 0, 0);
+  --border-radius: 0.5rem;
+  --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   --transition: all 0.3s ease;
 }
 
@@ -19,13 +19,7 @@
   padding: 0;
   box-sizing: border-box;
   font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
-}
-
-body {
-  background-color: var(--bg-light);
-  color: var(--text-dark);
   transition: var(--transition);
-  line-height: 1.6;
 }
 
 .container {
@@ -78,7 +72,7 @@ body.dark .section-title {
 }
 
 /* semantic color variables for this project */
-:root {
+:root, :root.light {
   --color-background: var(--vt-c-white);
   --color-background-soft: var(--vt-c-white-soft);
   --color-background-mute: var(--vt-c-white-mute);
@@ -105,6 +99,18 @@ body.dark .section-title {
     --color-text: var(--vt-c-text-dark-2);
   }
 }
+:root.dark {
+  --color-background: var(--vt-c-black);
+  --color-background-soft: var(--vt-c-black-soft);
+  --color-background-mute: var(--vt-c-black-mute);
+
+  --color-border: var(--vt-c-divider-dark-2);
+  --color-border-hover: var(--vt-c-divider-dark-1);
+
+  --color-heading: var(--vt-c-text-dark-1);
+  --color-text: var(--vt-c-text-dark-2);
+}
+
 
 *,
 *::before,
@@ -118,9 +124,7 @@ body {
   min-height: 100vh;
   color: var(--color-text);
   background: var(--color-background);
-  transition:
-    color 0.5s,
-    background-color 0.5s;
+  transition: var(--transition);
   line-height: 1.6;
   font-family:
     Inter,

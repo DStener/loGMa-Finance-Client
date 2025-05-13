@@ -1,5 +1,5 @@
 <template>
-    <div class="auth-container">
+    <div  class="auth-container">
         <div class="auth-card">
         <div class="auth-header">
             <i class="fas fa-wallet"></i>

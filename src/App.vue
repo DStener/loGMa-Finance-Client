@@ -1,10 +1,12 @@
 <template>
     <hmenu/>
+    <router-view />
 </template>
 
 <script>
-import auth from './components/auth.vue';
+
 import hmenu from './components/hmenu.vue';
+
 
 export default {
 
@@ -14,7 +16,12 @@ export default {
     data() {
         return {}; 
     },
-    methods: {} 
+    methods: {
+        currentPath(path) {
+            return window.location.pathname === path
+        }
+
+    } 
     }
 </script>
 
