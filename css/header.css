@@ -1,0 +1,210 @@
+@import url('https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css');
+
+.header {
+    background-color: rgba(0, 0, 0, 0);
+    color: white;
+    padding: 16px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: rgb(7, 7, 7);
+    margin-left: 0;
+    padding-left: 0;
+    transition: color 0.3s;
+}
+
+.menu-toggle {
+    background: none;
+    border: none;
+    color: black;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: none;
+    padding: 8px;
+    transition: color 0.3s;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.theme-toggle,
+.auth-btn,
+.user-profile {
+    background: none;
+    border: none;
+    color: black;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 8px;
+}
+
+.avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.nav {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    transition: var(--transition);
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.nav-link.router-link-active {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+
+.nav-details {
+    position: relative;
+    width: 100%;
+}
+
+.nav-summary {
+    font-size: 1.1rem;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.325rem 0.2rem;
+    cursor: pointer;
+    color: white;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+
+.nav-summary:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+.nav-summary::-webkit-details-marker {
+    display: none;
+}
+
+
+.nav-dropdown {
+    margin-left: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.dropdown-link {
+    padding-left: 0;
+    padding-right: 0;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.dropdown-link:hover {
+    background-color: transparent;
+    color: white;
+}
+
+.white-icon {
+    color: white !important;
+}
+
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: block;
+        z-index: 100;
+    }
+
+    .logo {
+        z-index: 100;
+        position: relative;
+    }
+
+    .header-right {
+        z-index: 100;
+        position: relative;
+    }
+
+    .nav {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 280px;
+        height: 100vh;
+        background-color: #2d3748;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 80px 20px 20px;
+        box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+        z-index: 99;
+        overflow-y: auto;
+    }
+
+    .nav.show {
+        left: 0;
+    }
+
+    .nav-link {
+        width: 100%;
+        padding: 0.325rem 0.2rem;
+        font-size: 1.1rem;
+    }
+
+    .nav-details {
+        width: 100%;
+    }
+
+    .nav-dropdown {
+        margin-left: 1.5rem;
+    }
+}
+
+@media (max-width: 380px) {
+    .nav {
+        width: 100vw;
+    }
+
+    .theme-toggle,
+    .auth-btn,
+    .user-profile {
+        color: white !important;
+    }
+}
