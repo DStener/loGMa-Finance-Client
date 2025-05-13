@@ -1,11 +1,13 @@
 <template>
+    <auth/>
 </template>
 
 <script>
-
+import auth from './components/auth.vue';
 export default {
 
-    components: {
+    components: { 
+        auth
     },
     data() {
         return {}; 
