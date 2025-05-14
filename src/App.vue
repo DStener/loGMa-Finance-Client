@@ -1,6 +1,6 @@
 <template>
-    <hmenu/>
-    <router-view v-if="is404Status"/>
+    <hmenu />
+    <router-view v-if="is404Status" />
 </template>
 
 <script>
@@ -12,11 +12,11 @@ export default {
 
 
 
-    components: { 
+    components: {
         hmenu
     },
     data() {
-        return {}; 
+        return {};
     },
     computed: {
         is404Status() {
@@ -32,10 +32,8 @@ export default {
             return window.location.pathname === path
         }
 
-    } 
     }
+}
 </script>
 
-<style>
-
-</style>
+<style></style>
