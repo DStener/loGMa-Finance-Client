@@ -9,26 +9,25 @@
 
         <form @submit.prevent="handleSubmit" id="auth">
 
-            <div class="form-group" v-for="field in loginInputs" v-if="isLoginMode">
-            <label :for="field.field">{{field.name}}</label>
-            <input 
-                :type="field.type" 
-                :id="field.field"  
-                required 
-                :placeholder="field.placeholder"
-            >
-            </div>
-
+            <template v-for="field in loginInputs" v-if="isLoginMode">
+                <label class="form-label" :for="field.field">{{field.name}}</label>
+                <input  class="form-input"
+                    :type="field.type" 
+                    :name="field.field"   
+                    :placeholder="field.placeholder"
+                required>
+            </template>
             
-            <div class="form-group" v-for="field in regInputs" v-if="!isLoginMode">
-            <label :for="field.field">{{field.name}}</label>
-            <input 
-                :type="field.type" 
-                :id="field.field"  
-                required 
-                :placeholder="field.placeholder"
-            >
-            </div>
+            <template v-for="field in regInputs" v-if="!isLoginMode">
+                <label class="form-label" :for="field.field">{{field.name}}</label>
+                <input  class="form-input"
+                    :type="field.type" 
+                    :name="field.field"   
+                    :placeholder="field.placeholder"
+                required>
+            </template>
+
+            <p v-if="errorMessages" class="form-error"> {{errorMessages}}</p>
 
             <button type="submit" class="btn-submit">
             {{ isLoginMode ? 'Войти' : 'Зарегистрироваться' }}
@@ -42,19 +41,21 @@
                 </a>
             </p>
             </div>
+
+
         </form>
         </div>
     </div>
 </template>
 
 <script>
+import { errorMessages } from 'vue/compiler-sfc';
+
     export default {
     data() {
         return {
         isLoginMode: true,
-        email: '',
-        password: '',
-        name: '',
+        errorMessages: null,
         
         loginInputs : [
             {
@@ -64,7 +65,7 @@
                 placeholder: "Введите ваш логин " 
             },
             {
-                field: "login",
+                field: "password",
                 name: "Пароль",
                 type: "password",
                 placeholder: "Введите пароль" 
@@ -114,34 +115,32 @@
     
     methods: {
         toggleMode() {
-        this.isLoginMode = !this.isLoginMode
-        this.email = ''
-        this.password = ''
-        if (!this.isLoginMode) {
-            this.name = ''
-        }
+            this.isLoginMode = !this.isLoginMode;
+            this.errorMessages = null;
         },
         
-        async handleSubmit() {
+        async handleSubmit(e) {
+            e.preventDefault();
         
-        const path = (this.isLoginMode)? "/api/auth/login" : "/api/auth/reg";
+            const path = (this.isLoginMode)? "/api/auth/login" : "/api/auth/reg";
 
-        const form = document.getElementById("auth");
-        const formData = new FormData(form);
+            const form = document.getElementById("auth");
+            const formData = new FormData(form);
 
-        const requestOptions = {
-            method: 'POST',
-            body: formData,
-        };
+            const requestOptions = {
+                method: 'POST',
+                body: formData,
+            };
 
-        const response = await fetch(path, requestOptions);
-        const status = await response.status;
+            const response = await fetch(path, requestOptions);
+            const status = await response.status;
+            const data = await response.json();
 
-        if(status != 404) { return }
-        
+            if(status != 200 && status != 201) {
+                this.errorMessages = data.message;
 
-        // console.log("test");s
-
+                console.log(data)
+            };
         }
     }
     }

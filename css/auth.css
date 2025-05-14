@@ -21,17 +21,21 @@
     margin-bottom: 30px;
 }
 
-.form-group {
-    margin-bottom: 20px;
+.form-error {
+    width: 100%;
+    background-color: brown;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    color: var(--vt-c-white);
 }
 
-.form-group label {
+.form-group label, .form-label {
     display: block;
     margin-bottom: 8px;
     font-weight: 500;
 }
 
-.form-group input {
+.form-group input, .form-input {
     width: 100%;
     padding: 12px 15px;
     border: 1px solid #11111157;
@@ -39,6 +43,7 @@
     font-size: 1rem;
     background-color: var(--color-background-mute);
     color: var(--color-text);
+    margin-bottom: 20px;
 }
 
 .btn-submit {

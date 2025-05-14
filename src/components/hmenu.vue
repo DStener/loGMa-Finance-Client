@@ -8,7 +8,7 @@
                 </button>
 
                 <div class="logo" :class="{ 'white-icon': isMenuOpen }">
-                    <i class="ri-wallet-3-line"></i>
+                    <img src="/src/assets/favicon.png" class="logo"/>
                     <span>loGMa</span>
                 </div>
             </div>
@@ -65,7 +65,7 @@ export default {
             isMenuOpen: false,
             isDarkTheme: false,
             isAuth: 0,
-            userAvatar: '',
+            userAvatar: null,
             groups: [
                 { name: "Семья" },
                 { name: "Друзья" },
@@ -97,12 +97,16 @@ export default {
 
     // Check that user is logined
     mounted: async function() {
-         const requestOptions = {
-            method: 'POST',
-        };
-        const response = await fetch('/api/auth/me', requestOptions);
+
+        const response = await fetch('/api/auth/me');
+        const status = await response.status;
         const data = await response.json();
-        // if()
+
+        if(status != 200) { return; }
+
+        this.isAuth = 1;
+        this.userAvatar = `/api/file/${data.avatar}`;
+        console.log(this.userAvatar);
     },
 
 
