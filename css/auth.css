@@ -2,8 +2,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    padding: 20px;
+    min-height: calc(100vh - 20vh);
+    padding: 0px 20px;
     background-color: var(--color-background);
 }
 

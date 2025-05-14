@@ -7,17 +7,16 @@ import App from './App.vue'
 
 import auth from './components/auth.vue';
 import welcome from './components/welcome.vue';
+import notfound from './components/notfound.vue';
 
 
 const router = createRouter({
-  routes: [{
-    path: '/',
-    component: welcome
-  },
-  {
-    path: '/auth',
-    component: auth
-  },],
+  mode: "history",
+  routes: [
+    { path: '/', component: welcome },
+    { path: '/auth', component: auth},
+    { path: '/:pathMatch(.*)*', component: notfound},
+  ],
   history: createWebHistory()
 })
 

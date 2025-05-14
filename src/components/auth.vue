@@ -7,41 +7,28 @@
             <p>{{ isLoginMode ? 'Вход в ваш аккаунт' : 'Создание нового аккаунта' }}</p>
         </div>
 
-        <div class="form-group" v-if="!isLoginMode">
-            <label for="name">Имя</label>
-            <input 
-                type="text" 
-                id="name" 
-                v-model="name" 
-                required 
-                placeholder="Как вас зовут?"
-            >
-            </div>
+        <form @submit.prevent="handleSubmit" id="auth">
 
-        <form @submit.prevent="handleSubmit">
-            <div class="form-group">
-            <label for="email">Email</label>
+            <div class="form-group" v-for="field in loginInputs" v-if="isLoginMode">
+            <label :for="field.field">{{field.name}}</label>
             <input 
-                type="email" 
-                id="email" 
-                v-model="email" 
+                :type="field.type" 
+                :id="field.field"  
                 required 
-                placeholder="Введите ваш email"
-            >
-            </div>
-
-            <div class="form-group">
-            <label for="password">Пароль</label>
-            <input 
-                type="password" 
-                id="password" 
-                v-model="password" 
-                required 
-                :placeholder="isLoginMode ? 'Введите ваш пароль' : 'Придумайте пароль'"
+                :placeholder="field.placeholder"
             >
             </div>
 
             
+            <div class="form-group" v-for="field in regInputs" v-if="!isLoginMode">
+            <label :for="field.field">{{field.name}}</label>
+            <input 
+                :type="field.type" 
+                :id="field.field"  
+                required 
+                :placeholder="field.placeholder"
+            >
+            </div>
 
             <button type="submit" class="btn-submit">
             {{ isLoginMode ? 'Войти' : 'Зарегистрироваться' }}
@@ -68,6 +55,60 @@
         email: '',
         password: '',
         name: '',
+        
+        loginInputs : [
+            {
+                field: "login",
+                name: "Логин",
+                type: "text",
+                placeholder: "Введите ваш логин " 
+            },
+            {
+                field: "login",
+                name: "Пароль",
+                type: "password",
+                placeholder: "Введите пароль" 
+            },
+
+        ],
+        regInputs : [
+            {
+                field: "login",
+                name: "Логин",
+                type: "text",
+                placeholder: "Придумайте логин" 
+            },
+            {
+                field: "name",
+                name: "Имя",
+                type: "text",
+                placeholder: "Укажите имя" 
+            },
+            {
+                field: "surname",
+                name: "Фамилия",
+                type: "text",
+                placeholder: "Укажите фамилию" 
+            },
+            {
+                field: "patronymic",
+                name: "Отчество",
+                type: "text",
+                placeholder: "Укажите отчество" 
+            },
+            {
+                field: "birthday",
+                name: "Дата рождения",
+                type: "date",
+                placeholder: "Укажите дату рождения" 
+            },
+            {
+                field: "password",
+                name: "Пароль",
+                type: "password",
+                placeholder: "Укажите пароль" 
+            },
+        ]
         }
     },
     
@@ -81,19 +122,26 @@
         }
         },
         
-        handleSubmit() {
-        if (this.isLoginMode) {
-            console.log('Пользователь хочет войти с:', {
-            email: this.email,
-            password: this.password
-            })
-        } else {
-            console.log('Пользователь хочет зарегистрироваться с:', {
-            email: this.email,
-            password: this.password,
-            name: this.name
-            })
-        }
+        async handleSubmit() {
+        
+        const path = (this.isLoginMode)? "/api/auth/login" : "/api/auth/reg";
+
+        const form = document.getElementById("auth");
+        const formData = new FormData(form);
+
+        const requestOptions = {
+            method: 'POST',
+            body: formData,
+        };
+
+        const response = await fetch(path, requestOptions);
+        const status = await response.status;
+
+        if(status != 404) { return }
+        
+
+        // console.log("test");s
+
         }
     }
     }

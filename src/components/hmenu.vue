@@ -95,6 +95,17 @@ export default {
         }
     },
 
+    // Check that user is logined
+    mounted: async function() {
+         const requestOptions = {
+            method: 'POST',
+        };
+        const response = await fetch('/api/auth/me', requestOptions);
+        const data = await response.json();
+        // if()
+    },
+
+
     methods: {
         toggleMenu() {
             this.isMenuOpen = !this.isMenuOpen
