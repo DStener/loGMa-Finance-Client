@@ -8,7 +8,7 @@ import App from './App.vue'
 import auth from './components/auth.vue';
 import welcome from './components/welcome.vue';
 import notfound from './components/notfound.vue';
-
+import analytics from './components/analytics.vue';
 
 const router = createRouter({
   mode: "history",
@@ -16,6 +16,7 @@ const router = createRouter({
     { path: '/', component: welcome },
     { path: '/auth', component: auth},
     { path: '/:pathMatch(.*)*', component: notfound},
+    { path: '/analytics', component: analytics},
   ],
   history: createWebHistory()
 })
