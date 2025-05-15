@@ -25,6 +25,7 @@
 
 
         <section class="features-section">
+        <div class="max-bound">
             <div className="features-heading">
                 <div className="feature-icon">
                     <i class="ri-tools-fill m-feature-icon"></i>
@@ -81,15 +82,19 @@
                     Попробуйте наше приложение уже сегодня и почувствуйте разницу в управлении личным и семейным бюджетом!
                 </p>
             </section>
+        </div>
         </section>
-
     </div>
 </template>
 
 <script>
-    export default {
-    name: 'WelcomePage'
-    }
+
+
+
+export default {
+    name: 'WelcomePage',
+    
+}
 </script>
 
 <style src="/css/welcome.css"></style>

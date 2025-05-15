@@ -77,6 +77,15 @@
 .features-section {
     background-color: var(--primary);
     padding: 2rem 1.5rem;
+    width: 100vw;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    left: 0;
+}
+
+.max-bound {
+    max-width: calc(1200px - 1.5rem);
 }
 
 .features-heading {

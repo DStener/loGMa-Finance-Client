@@ -13,6 +13,26 @@
                 </div>
             </div>
 
+            <nav class="nav" :class="{ show: isMenuOpen }">
+                <router-link to="/" class="nav-link">
+                    <i class="ri-home-4-line"></i> Главная
+                </router-link>
+                <router-link v-if="isAuth === 1" to="/my" class="nav-link">
+                    <i class="ri-history-line"></i> Мой бюджет
+                </router-link>
+  
+                <details v-if="isAuth === 1" class="nav-details">
+                    <summary class="nav-summary">
+                        <i class="ri-group-line"></i> Группы
+                    </summary>
+                    <div class="nav-dropdown">
+                        <router-link v-for="group in groups" to="/groups" class="nav-link dropdown-link">
+                            {{ group.name }}
+                        </router-link>
+                    </div>
+                </details>
+            </nav>
+
             <div class="header-right">
                 <button class="theme-toggle" :class="{ 'white-icon': isMenuOpen }" @click="toggleTheme" aria-label="Toggle theme">
                     <i :class="themeIcon"></i>
@@ -26,33 +46,6 @@
                     <i class="ri-login-box-line"></i>
                 </router-link>
             </div>
-
-            <nav class="nav" :class="{ show: isMenuOpen }">
-                <router-link to="/" class="nav-link">
-                    <i class="ri-home-4-line"></i> Главная
-                </router-link>
-                <router-link to="/history" class="nav-link">
-                    <i class="ri-history-line"></i> История
-                </router-link>
-                <router-link to="/analytics" class="nav-link">
-                    <i class="ri-pie-chart-2-line"></i> Аналитика
-                </router-link>
-
-                <details class="nav-details">
-                    <summary class="nav-summary">
-                        <i class="ri-group-line"></i> Группы
-                    </summary>
-                    <div class="nav-dropdown">
-                        <router-link v-for="group in groups" to="/groups" class="nav-link dropdown-link">
-                            {{ group.name }}
-                        </router-link>
-                    </div>
-                </details>
-
-                <router-link to="/categories" class="nav-link">
-                    <i class="ri-price-tag-3-line"></i> Категории
-                </router-link>
-            </nav>
         </div>
     </header>
 </template>
