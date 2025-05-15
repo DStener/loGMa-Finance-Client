@@ -13,7 +13,7 @@
                     <h1>Добавить категорию</h1>
                     <input type="text" v-model="categoryName" placeholder="Название">
                     <input type="number" v-model="categoryLimit" placeholder="Задайте лимит">
-                    <button  @click=addCategory, isWindowShow2 = "false"  className="btn-add">добавить</button>
+                    <button  @click="addCategory, isWindowShow2 = 'false'" className="btn-add">добавить</button>
                 </div>
             </div>
         </div>
