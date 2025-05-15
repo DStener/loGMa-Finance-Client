@@ -13,6 +13,8 @@ input {
 
 .user{
     color: var(--text-light);
+    width: 135px;
+    margin: 6px;
 }
 
 .sort-controls {
