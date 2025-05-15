@@ -12,10 +12,10 @@
         <div class="win-main">
             <button class="win-close-btn" @click="this.isWindowShow = false"><i class="ri-close-line"></i></button>
             <h1>Добавить трату</h1>
-            <input type="text" v-model="data" placeholder="чч мм гггг">
-            <input type="text" v-model="category" placeholder="категория">
-            <input type="text" v-model="sum" placeholder="сумма">
-            <input type="text" v-model="Description" placeholder="описание" className="inp-description">
+            <input type="text" class="color-input" v-model="data" placeholder="чч мм гггг">
+            <input type="text" class="color-input" v-model="category" placeholder="категория">
+            <input type="text" class="color-input" v-model="sum" placeholder="сумма">
+            <input type="text" class="color-input" v-model="Description" placeholder="описание" className="inp-description">
             <button  @click="sendData(), isWindowShow = false"  className="btn-add">добавить</button>
         </div>
     </div>

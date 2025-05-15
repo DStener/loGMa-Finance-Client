@@ -31,6 +31,10 @@
     font-size: 30px;
 }
 
+.color-input {
+    color: var(--text-color);
+}
+
 .analytics-block {
     margin-bottom: 30px;
     display: flex;

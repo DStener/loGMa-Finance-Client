@@ -225,6 +225,10 @@ body.dark .btn-icon:hover {
     font-size: 30px;
 }
 
+.color-input {
+    color: var(--text-color);
+}
+
 body.dark .pagination-btn {
     background: #3A4A54;
     color: var(--accent);

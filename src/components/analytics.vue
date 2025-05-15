@@ -2,19 +2,16 @@
 <div className="analytics-block">
     <div className="chart-section">
 
-        <button className="pagination-btn" style="padding-right: 10px;" 
+        <button className="pagination-btn"  
         @click="isWindowShow2 = true"><i className="ri-add-fill"></i></button>
 
         <div v-if="isWindowShow2" class="win-background">
             <div class="win-main">
                 <button class="win-close-btn" @click="this.isWindowShow2 = false"><i class="ri-close-line"></i></button>
-                <div class="win-main">
-                    <button class="win-close-btn" @click="this.isWindowShow2 = false"><i class="ri-close-line"></i></button>
-                    <h1>Добавить категорию</h1>
-                    <input type="text" v-model="categoryName" placeholder="Название">
-                    <input type="number" v-model="categoryLimit" placeholder="Задайте лимит">
-                    <button  @click=addCategory, isWindowShow2 = "false"  className="btn-add">добавить</button>
-                </div>
+                <h1>Добавить категорию</h1>
+                <input type="text" class="color-input" v-model="categoryName" placeholder="Название">
+                <input type="number" class="color-input" v-model="categoryLimit" placeholder="Задайте лимит">
+                <button  @click="addCategory()"  className="btn-add">добавить</button>
             </div>
         </div>
 
@@ -24,24 +21,6 @@
         <div className="chart-container" id="chart">            
 
             <canvas className="chart-img"></canvas>
-            <div className="chart-footer">
-
-                <span>Обновлено: {{ lastUpdated }}</span>
-
-                <div className="chart-stats">
-                    
-                    <div className="stat-item">
-                        <span className="stat-value">{{ operationsCount }}</span>
-                        <span className="stat-label">операции</span>
-                    </div>
-
-                    <div className="stat-item">
-                        <span className="stat-value">{{ categoriesCount }}</span>
-                        <span className="stat-label">категории</span>
-                    </div>
-
-                </div>
-            </div>
         </div>
     
         <div className="chart-legend">
@@ -76,13 +55,12 @@
 </template>
 
 <script>
-    // import { Chart } from 'chart.js';
 
     export default {
         name: 'AnalyticsBlock',
         data() {
             return {
-            categotyName: '',
+            categoryName: "",
             categoryLimit: null,
             isChartExpanded: false,
             isWindowShow2: false,
@@ -99,32 +77,9 @@
             chart: null
             };
         },
-        // mounted() {
-        //     this.initChart();
-        // },
+        
         methods: {
-            // initChart() {
-            // const ctx = this.$refs.financeChart.getContext('2d');
-            // this.chart = new Chart(ctx, {
-            //     type: 'doughnut',
-            //     data: {
-            //     labels: this.categories.map(c => c.name),
-            //     datasets: [{
-            //         data: this.categories.map(c => parseFloat(c.amount.replace(',', ''))),
-            //         backgroundColor: this.categories.map(c => c.color),
-            //         borderWidth: 0
-            //     }]
-            //     },
-            //     options: {
-            //     cutout: '70%',
-            //     plugins: {
-            //         legend: {
-            //         display: false
-            //         }
-            //     }
-            //     }
-            // });
-            // },
+            
             toggleChartExpand() {
                 var block = document.getElementById('chart');
                 if (block.style.display == 'none') {
@@ -135,7 +90,7 @@
             },
 
             addCategory(){
-                if (this.categotyName === '') {
+                if (this.categotyName === "") {
                     alert('Введите название категории');
                     return;
                 }
@@ -144,6 +99,7 @@
                     alert('Лимит должен быть выше нуля');
                     return;
                 }
+                isWindowShow2 = "false"//это после успешной отправки данных
             }
         }
     };

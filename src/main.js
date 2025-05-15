@@ -13,6 +13,7 @@ import _profile from './components/_profile.vue';
 import profile from './view/profile.vue';
 import wall from './view/wall.vue'
 import history from './components/history.vue';
+import groupwall from './view/groupwall.vue';
 
 const router = createRouter({
   mode: "history",
@@ -25,6 +26,9 @@ const router = createRouter({
     { path: '/:pathMatch(.*)*', component: notfound },
     { path: '/analytics', component: analytics },
     { path: '/history', component: history },
+    { path: '/groups', component: groupwall },
+    { path: '/stats', component: analytics }
+
   ],
   history: createWebHistory()
 })
