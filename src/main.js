@@ -14,6 +14,7 @@ import wall from './view/wall.vue'
 import history from './components/history.vue';
 import groupwall from './view/groupwall.vue';
 import historyGroup from './components/history-group.vue';
+import mwinBS from './components/mwinBS.vue';
 
 const router = createRouter({
   mode: "history",
@@ -27,8 +28,8 @@ const router = createRouter({
     { path: '/history', component: history },
     { path: '/groups', component: groupwall },
     { path: '/stats', component: analytics },
-    { path: '/history-group', component: historyGroup}
-
+    { path: '/history-group', component: historyGroup },
+    { path: '/mb', component: mwinBS }
   ],
   history: createWebHistory()
 })
