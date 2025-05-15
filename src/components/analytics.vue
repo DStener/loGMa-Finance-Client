@@ -1,6 +1,23 @@
 <template>
 <div className="analytics-block">
     <div className="chart-section">
+
+        <button className="pagination-btn" style="padding-right: 10px;" 
+        @click="isWindowShow2 = true"><i className="ri-add-fill"></i></button>
+
+        <div v-if="isWindowShow2" class="win-background">
+            <div class="win-main">
+                <button class="win-close-btn" @click="this.isWindowShow2 = false"><i class="ri-close-line"></i></button>
+                <div class="win-main">
+                    <button class="win-close-btn" @click="this.isWindowShow2 = false"><i class="ri-close-line"></i></button>
+                    <h1>Добавить категорию</h1>
+                    <input type="text" v-model="categoryName" placeholder="Название">
+                    <input type="number" v-model="categoryLimit" placeholder="Задайте лимит">
+                    <button  @click=addCategory, isWindowShow2 = "false"  className="btn-add">добавить</button>
+                </div>
+            </div>
+        </div>
+
         <button className="chart-toggle" @click="toggleChartExpand">
                 <i className="fas" :class="isChartExpanded ? 'ri-arrow-down-s-line' : 'ri-arrow-up-s-line'"></i>
         </button>
@@ -65,6 +82,8 @@
         name: 'AnalyticsBlock',
         data() {
             return {
+            categotyName: '',
+            categoryLimit: null,
             isChartExpanded: false,
             isWindowShow2: false,
             lastUpdated: '01.05.2025',
@@ -114,6 +133,18 @@
                     block.style.display = 'none';
                 }
             },
+
+            addCategory(){
+                if (this.categotyName === '') {
+                    alert('Введите название категории');
+                    return;
+                }
+                
+                if (this.categoryLimit === 0 || this.categoryLimit < 0) {
+                    alert('Лимит должен быть выше нуля');
+                    return;
+                }
+            }
         }
     };
 </script>

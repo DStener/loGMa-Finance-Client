@@ -1,3 +1,36 @@
+.btn-add {
+    font-size: 18px;
+    width: 100%;
+    height: 30px;
+    padding: 0 0 3px 0px;
+    background-color: var(--color-background-soft);
+    border: none;
+    border-radius: 1rem;
+    cursor: pointer;
+    color: var(--primary-dark);
+    transition: var(--transition);
+    align-items: center;
+}
+
+.btn-add:hover {
+    background: var(--color-background-mute);
+    color: var(--primary-light);
+}
+
+.pagination-btn {
+    background: var(--primary-dark);
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    color: var(--vt-c-white-soft);
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    font-size: 30px;
+}
+
 .analytics-block {
     margin-bottom: 30px;
     display: flex;

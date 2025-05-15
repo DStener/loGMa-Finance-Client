@@ -30,34 +30,46 @@
         </div>
 
       <div v-for="(el, index) in paginatedExpenses" :key="currentPage * itemsPerPage + index">
-        <h3 
-            id="date" 
-          v-if="shouldShowDate(currentPage * itemsPerPage + index)" 
+        <h3 v-if="shouldShowDate(currentPage * itemsPerPage + index)" 
             class="date" 
             style="display: block;"
         >
             {{ el.viweData }}
         </h3>
+        <!-- <input v-if="el.isEditing == true" 
+                        v-model="el.editedData" 
+                        type="text" 
+                        class="name-input" 
+                        @keyup.enter="saveChanges(currentPage * itemsPerPage + index)"> -->
         
             <div class="table-line">
                 <div class="category">
                     <span class="category-badge" v-if="!el.isEditing">{{ el.category }}</span>
                     <input 
                         v-else 
-                        v-model="el.editedName" 
+                        v-model="el.editedCategory" 
                         type="text" 
                         class="name-input" 
-                        @keyup.enter="saveName(currentPage * itemsPerPage + index)">
+                        @keyup.enter="saveChanges(currentPage * itemsPerPage + index)">
                 </div>                        
-                <p class="amount">{{ el.sum + " ₽"}}</p>
-                <p class="description">{{ el.Description }}</p>
+                <p class="amount" v-if="!el.isEditing">{{ el.sum + " ₽"}}</p>
+                <input 
+                        v-else 
+                        v-model="el.editedSum" 
+                        type="text" 
+                        class="name-input" 
+                        @keyup.enter="saveChanges(currentPage * itemsPerPage + index)">
+                <p class="description" v-if="!el.isEditing">{{ el.Description }}</p>
+                <input 
+                        v-else 
+                        v-model="el.editedDescription" 
+                        type="text" 
+                        class="name-input" 
+                        @keyup.enter="saveChanges(currentPage * itemsPerPage + index)">
                 <div class="actions">
                     <button 
                         class="btn-icon" 
-                        @click="toggleCategoryEdit(currentPage * itemsPerPage + index);
-                        toggleSumEdit(currentPage * itemsPerPage + index);
-                        toggleDescriptionEdit(currentPage * itemsPerPage + index)"
-                        >
+                        @click="toggleEdit(currentPage * itemsPerPage + index);">
                         <i :class="el.isEditing ? 'ri-save-fill' : 'ri-pencil-fill'"></i>
                     </button>
                     <button 
@@ -89,9 +101,9 @@
             <i class="ri-arrow-right-s-line"></i>
         </button>
         </div>
-        <a href="historyV7.html" class="btn-all">
+        <!-- <a href="historyV7.html" class="btn-all">
             <i class="ri-file-list-2-fill"></i> Все
-        </a>
+        </a> -->
     </div>
     </section>
 </template>
@@ -251,18 +263,26 @@ export default{
             this.Description = '';
         },
 
-        toggleCategoryEdit(index) {
+        toggleEdit(index) {
             if (this.expenses[index].isEditing) {
-            this.saveName(index);
+            this.saveChanges(index);
             } else {
-            this.expenses[index].editedName = this.expenses[index].category;
+            this.expenses[index].editedCategory = this.expenses[index].category;
+            this.expenses[index].editedSum = this.expenses[index].sum;
+            this.expenses[index].editedDescription = this.expenses[index].Description;            
             this.expenses[index].isEditing = true;
             }
         },
 
-        saveName(index) {
-            if (this.expenses[index].editedName.trim()) {
-            this.expenses[index].category = this.expenses[index].editedName.trim();
+        saveChanges(index) {
+            if (this.expenses[index].editedCategory.trim()) {
+            this.expenses[index].category = this.expenses[index].editedCategory.trim();
+            }
+            if (this.expenses[index].editedSum.trim()) {
+            this.expenses[index].sum = this.expenses[index].editedSum.trim();
+            }
+            if (this.expenses[index].editedSum.trim()) {
+            this.expenses[index].Description = this.expenses[index].editedDescription.trim();
             }
             this.expenses[index].isEditing = false;
         },
