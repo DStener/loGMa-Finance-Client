@@ -23,7 +23,7 @@ input{
 
 .btn-add{
     font-size: 18px;
-    width: 100px;
+    width: 100%;
     height: 30px;
     padding: 0 0 3px 0px;
     background-color: var(--color-background-soft   );
@@ -33,7 +33,6 @@ input{
     color: var(--primary-dark);
     transition: var(--transition);
     align-items: center;
-    margin-left: 255px;
 }
 
 .btn-add:hover{
@@ -97,6 +96,7 @@ input{
     text-align: left;
     font-size: 23px;
     padding: 12px 15px;
+    display: none;
 }
 
 .operations-table {

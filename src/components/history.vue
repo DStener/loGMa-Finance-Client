@@ -5,28 +5,33 @@
         <h2 className="section-title">
         <i className="ri-file-list-2-fill"></i> История расходов
         </h2>
-        <button className="pagination-btn" style="padding-right: 10px;" @click="showDiv()"><i className="ri-add-fill"></i></button>
+        <button className="pagination-btn" style="padding-right: 10px;" @click="isWindowShow = true"><i className="ri-add-fill"></i></button>
     </div>
-    <div className="add-container" id="add">
-        <input type="text" v-model="data" placeholder="чч мм гггг">
-        <input type="text" v-model="category" placeholder="категория">
-        <input type="text" v-model="sum" placeholder="сумма">
-        <input type="text" v-model="Description" placeholder="описание" className="inp-description">
-        <button  @click="sendData()"  className="btn-add">добавить</button>
+
+    <div v-if="isWindowShow" class="win-background">
+        <div class="win-main">
+            <button class="win-close-btn" @click="this.isWindowShow = false"><i class="ri-close-line"></i></button>
+            <h1>Добавить трату</h1>
+            <input type="text" v-model="data" placeholder="чч мм гггг">
+            <input type="text" v-model="category" placeholder="категория">
+            <input type="text" v-model="sum" placeholder="сумма">
+            <input type="text" v-model="Description" placeholder="описание" className="inp-description">
+            <button  @click="sendData()"  className="btn-add">добавить</button>
+        </div>
     </div>
     
     <h1 className="error">{{error}}</h1>
 
     <div className="table-container">
         <div v-if="expenses.length == '0'" className="yore-histori">
-        <p className="date" style="color: rgb(149 149 149);">
+        <p className="date" style="color: rgb(149 149 149); display: block;">
             здесь вы можете отслеживать свои траты
         </p>
         </div>
 
         <div v-for="(el, index) in expenses" :key="index">
-        <h3 id="date" v-if="el.data[index] != el.data[index - 1] || index == '0'" className="date">{{el.viweData}}</h3>
-
+        <h3 id="date" v-if="el.data[index] != el.data[index - 1] || index == '0'" className="date" style="display: block;">{{el.viweData}}</h3>
+        
         <div className="table-line">
             <div className="category">
             <span className="category-badge" v-if="!el.isEditing">{{ el.category }}</span>
@@ -63,6 +68,7 @@
 export default{
     data(){
     return{
+        isWindowShow: false,
         error: '',
         expenses: [
             {data:'12052020', viweData:'12 мая', category:'Транспорт', sum:'35', Description:'проезд в маршрутке'},
@@ -174,7 +180,7 @@ export default{
     },
 
     showDiv(){
-        document.getElementById('add').style.display = "block";
+        isWindowShow = "block";
         if(document.getElementById('add').style.display == "block") closeDiv();
     },
 

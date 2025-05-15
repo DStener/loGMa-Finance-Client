@@ -1,19 +1,22 @@
 <template>
-    <hmenu />
-    <router-view v-if="is404Status" />
+    <!-- <hmenu />
+    <router-view v-if="is404Status" /> -->
+    <history/>
 </template>
 
 <script>
 
-import hmenu from './components/hmenu.vue';
-
+// import hmenu from './components/hmenu.vue';
+import History from './components/history.vue';
+import history from './components/history.vue';
 
 export default {
 
 
 
     components: {
-        hmenu
+        // hmenu
+        history
     },
     data() {
         return {};
