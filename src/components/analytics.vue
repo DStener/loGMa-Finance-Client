@@ -66,6 +66,7 @@
         data() {
             return {
             isChartExpanded: false,
+            isWindowShow2: false,
             lastUpdated: '01.05.2025',
             operationsCount: 24,
             categoriesCount: 8,
