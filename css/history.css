@@ -11,6 +11,10 @@ input {
     border: 1px, solid;
 }
 
+.user{
+    color: var(--text-light);
+}
+
 .sort-controls {
     display: flex;
     gap: 10px;
@@ -29,6 +33,7 @@ input {
     border-radius: 4px;
     cursor: pointer;
     transition: all 0.2s;
+    color: var(--text-light);
 }
 
 .sort-btn:hover {
