@@ -46,18 +46,12 @@
         </form>
         </div>
     </div>
-    <mwin></mwin>
 </template>
 
 <script>
 import { errorMessages } from 'vue/compiler-sfc';
-import mwin from './mwin.vue';
 
 export default {
-    components: {
-        mwin,
-    },
-
     data() {
         return {
         isLoginMode: true,
