@@ -10,7 +10,7 @@
 }
 
 .finance-card {
-    background: var(--card-bg);
+    background: var(--color-background-soft);
     border-radius: 12px;
     padding: 20px;
     box-shadow: var(--box-shadow);
@@ -53,6 +53,7 @@
 .stat-title {
     font-size: 1.1rem;
     font-weight: 600;
+    color: var(--color-text);
 }
 
 .summary-value {
@@ -185,6 +186,7 @@
 
     .card-title {
         font-size: 1rem;
+        color: var(--color-heading);
     }
 
     .summary-value {

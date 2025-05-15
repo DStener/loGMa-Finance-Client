@@ -8,7 +8,7 @@
                 </button>
 
                 <div class="logo" :class="{ 'white-icon': isMenuOpen }">
-                    <img src="/src/assets/favicon.png" class="logo"/>
+                    <img src="/src/assets/favicon.png" class="logo" />
                     <span>loGMa</span>
                 </div>
             </div>
@@ -20,7 +20,7 @@
                 <router-link v-if="isAuth === 1" to="/my" class="nav-link">
                     <i class="ri-history-line"></i> Мой бюджет
                 </router-link>
-  
+
                 <details v-if="isAuth === 1" class="nav-details">
                     <summary class="nav-summary">
                         <i class="ri-group-line"></i> Группы
@@ -34,11 +34,13 @@
             </nav>
 
             <div class="header-right">
-                <button class="theme-toggle" :class="{ 'white-icon': isMenuOpen }" @click="toggleTheme" aria-label="Toggle theme">
+                <button class="theme-toggle" :class="{ 'white-icon': isMenuOpen }" @click="toggleTheme"
+                    aria-label="Toggle theme">
                     <i :class="themeIcon"></i>
                 </button>
 
-                <router-link v-if="isAuth === 1" to="/profile" class="user-profile" :class="{ 'white-icon': isMenuOpen }">
+                <router-link v-if="isAuth === 1" to="/profile" class="user-profile"
+                    :class="{ 'white-icon': isMenuOpen }">
                     <img v-if="userAvatar" :src="userAvatar" alt="User avatar" class="avatar" />
                     <i v-else class="ri-user-line"></i>
                 </router-link>
@@ -76,8 +78,8 @@ export default {
     },
 
     // Set saved theme color 
-    mounted: function() {
-        if(localStorage.getItem("isDark")  === "false") {
+    mounted: function () {
+        if (localStorage.getItem("isDark") === "false") {
             document.documentElement.classList.remove("dark")
             document.documentElement.classList.add("light")
             this.isDarkTheme = false;
@@ -89,13 +91,13 @@ export default {
     },
 
     // Check that user is logined
-    mounted: async function() {
+    mounted: async function () {
 
         const response = await fetch('/api/auth/me');
         const status = await response.status;
         const data = await response.json();
 
-        if(status != 200) { return; }
+        if (status != 200) { return; }
 
         this.isAuth = 1;
         this.userAvatar = `/api/file/${data.avatar}`;
@@ -110,8 +112,8 @@ export default {
 
         toggleTheme() {
 
-            if(localStorage.getItem("isDark") != null) {
-                if(localStorage.getItem("isDark")  === "true") {
+            if (localStorage.getItem("isDark") != null) {
+                if (localStorage.getItem("isDark") === "true") {
                     document.documentElement.classList.remove("dark")
                     document.documentElement.classList.add("light")
                     localStorage.setItem('isDark', "false");
@@ -134,7 +136,7 @@ export default {
                 localStorage.setItem('isDark', "false")
                 this.isDarkTheme = false;
             }
-            
+
         },
         handleAddExpense() {
             this.$emit('add-expense')
