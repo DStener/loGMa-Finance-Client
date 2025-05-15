@@ -12,14 +12,15 @@ input {
 }
 
 .name-input {
-    font-size: 1.5rem;
+    font-size: 1rem;
     font-weight: bold;
     border: 2px solid var(--primary-light);
     border-radius: 8px;
     padding: 5px 10px;
-    width: 100%;
+    width: 150px;
     color: inherit;
     background-color: transparent;
+    color: var(--text-color);
 }
 
 .btn-add {
@@ -64,6 +65,7 @@ input {
     outline: none;
     margin: 10px;
     border: 1px, solid;
+    color: var(--text-color);
 }
 
 .description {

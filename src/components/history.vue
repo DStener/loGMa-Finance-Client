@@ -15,7 +15,7 @@
             <input type="text" class="color-input" v-model="data" placeholder="чч мм гггг">
             <input type="text" class="color-input" v-model="category" placeholder="категория">
             <input type="text" class="color-input" v-model="sum" placeholder="сумма">
-            <input type="text" class="color-input" v-model="Description" placeholder="описание" className="inp-description">
+            <input type="text" className="inp-description" v-model="Description" placeholder="описание">
             <button  @click="sendData(), isWindowShow = false"  className="btn-add">добавить</button>
         </div>
     </div>
@@ -35,13 +35,7 @@
             style="display: block;"
         >
             {{ el.viweData }}
-        </h3>
-        <!-- <input v-if="el.isEditing == true" 
-                        v-model="el.editedData" 
-                        type="text" 
-                        class="name-input" 
-                        @keyup.enter="saveChanges(currentPage * itemsPerPage + index)"> -->
-        
+        </h3>        
             <div class="table-line">
                 <div class="category">
                     <span class="category-badge" v-if="!el.isEditing">{{ el.category }}</span>
