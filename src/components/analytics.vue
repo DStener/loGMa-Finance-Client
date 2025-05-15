@@ -79,32 +79,32 @@
             chart: null
             };
         },
-        mounted() {
-            this.initChart();
-        },
+        // mounted() {
+        //     this.initChart();
+        // },
         methods: {
-            initChart() {
-            const ctx = this.$refs.financeChart.getContext('2d');
-            this.chart = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                labels: this.categories.map(c => c.name),
-                datasets: [{
-                    data: this.categories.map(c => parseFloat(c.amount.replace(',', ''))),
-                    backgroundColor: this.categories.map(c => c.color),
-                    borderWidth: 0
-                }]
-                },
-                options: {
-                cutout: '70%',
-                plugins: {
-                    legend: {
-                    display: false
-                    }
-                }
-                }
-            });
-            },
+            // initChart() {
+            // const ctx = this.$refs.financeChart.getContext('2d');
+            // this.chart = new Chart(ctx, {
+            //     type: 'doughnut',
+            //     data: {
+            //     labels: this.categories.map(c => c.name),
+            //     datasets: [{
+            //         data: this.categories.map(c => parseFloat(c.amount.replace(',', ''))),
+            //         backgroundColor: this.categories.map(c => c.color),
+            //         borderWidth: 0
+            //     }]
+            //     },
+            //     options: {
+            //     cutout: '70%',
+            //     plugins: {
+            //         legend: {
+            //         display: false
+            //         }
+            //     }
+            //     }
+            // });
+            // },
             toggleChartExpand() {
                 var block = document.getElementById('chart');
                 if (block.style.display == 'none') {
