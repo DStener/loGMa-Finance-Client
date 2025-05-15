@@ -31,6 +31,21 @@
                         </router-link>
                     </div>
                 </details>
+
+                
+
+                <details v-if="isAuth === 1 && isAdmin === 1" class="nav-details">
+                    <summary class="nav-summary">
+                        <i class="ri-user-settings-line"></i>Управление группой
+                    </summary>
+                    <div class="nav-dropdown">
+                        <span><i class="ri-user-add-fill"></i> Пригласить пользователя</span>
+                        <span><i class="ri-user-shared-2-line"></i> Управление участниками</span>
+                        <span><i class="ri-file-edit-line"></i> Редактировать бюджет</span>
+                    </div>
+
+                </details>
+
             </nav>
 
             <div class="header-right">
@@ -60,6 +75,7 @@ export default {
             isMenuOpen: false,
             isDarkTheme: false,
             isAuth: 0,
+            isAdmin: 1,
             userAvatar: null,
             groups: [
                 { name: "Семья" },
