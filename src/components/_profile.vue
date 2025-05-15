@@ -2,45 +2,24 @@
     <div class="profile-container">
         <div class="profile-header">
             <div class="avatar-container">
-                <img 
-                    :src="newAvatar || user.avatar" 
-                    alt="Аватар пользователя" 
-                    class="profile-avatar"
-                    @click="avatarChange"
-                >
-                <input 
-                    type="file" 
-                    ref="avatarInput" 
-                    @change="avatarUpload" 
-                    accept="image/*" 
-                    style="display: none"
-                >
-                <button 
-                    class="avatar-edit-btn" 
-                    @click="avatarChange"
-                >
+                <img :src="newAvatar || user.avatar" alt="Аватар пользователя" class="profile-avatar"
+                    @click="avatarChange">
+                <input type="file" ref="avatarInput" @change="avatarUpload" accept="image/*" style="display: none">
+                <button class="avatar-edit-btn" @click="avatarChange">
                     <i class="ri-camera-line"></i>
                 </button>
             </div>
 
             <div class="profile-info">
                 <h2 v-if="!isEditing">{{ user.login }}</h2>
-                <input 
-                    v-else
-                    v-model="user.login"
-                    class="edit-input login-input"
-                >
+                <input v-else v-model="user.login" class="edit-input login-input">
                 <p class="email">{{ user.email }}</p>
-                
+
                 <div class="profile-fields">
                     <div class="field" v-for="field in editableFields" :key="field.key">
                         <label>{{ field.label }}</label>
-                        <input 
-                            v-if="isEditing && field.editable"
-                            v-model="user[field.key]"
-                            :type="field.type"
-                            class="edit-input"
-                        >
+                        <input v-if="isEditing && field.editable" v-model="user[field.key]" :type="field.type"
+                            class="edit-input">
                         <div v-else-if="field.key === 'password'" class="password-field">
                             ********
                             <button class="change-password-btn" @click="showPasswordModal">
@@ -75,24 +54,17 @@
             <i class="ri-logout-box-r-line"></i> Выйти
         </button>
 
-        <div v-if="showPasswordChangeModal" class="modal-overlay">
-            <div class="modal-content">
+        <div v-if="isWindowShow" class="win-background">
+            <div class="win-main">
+                <button class="win-close-btn" @click="this.isWindowShow = false"><i class="ri-close-line"></i></button>
                 <h3><i class="ri-key-2-line"></i> Изменение пароля</h3>
                 <div class="modal-field">
                     <label>Текущий пароль</label>
-                    <input 
-                        type="password" 
-                        v-model="currentPassword" 
-                        placeholder="Введите текущий пароль"
-                    >
+                    <input type="password" v-model="currentPassword" placeholder="Введите текущий пароль">
                 </div>
                 <div class="modal-field">
                     <label>Новый пароль</label>
-                    <input 
-                        type="password" 
-                        v-model="newPassword" 
-                        placeholder="Введите новый пароль"
-                    >
+                    <input type="password" v-model="newPassword" placeholder="Введите новый пароль">
                 </div>
                 <div class="modal-actions">
                     <button class="modal-confirm" @click="changePassword">
@@ -117,6 +89,7 @@ export default {
             currentPassword: '',
             newPassword: '',
             newAvatar: null,
+            isWindowShow: false,
             user: {
                 login: 'darkedoviz',
                 email: 'user@example.com',
@@ -170,7 +143,7 @@ export default {
         },
 
         showPasswordModal() {
-            this.showPasswordChangeModal = true;
+            this.isWindowShow = true;
             this.currentPassword = '';
             this.newPassword = '';
         },

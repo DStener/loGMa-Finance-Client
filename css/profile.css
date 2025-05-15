@@ -6,7 +6,7 @@
     max-width: 500px;
     margin: 1rem;
     position: relative;
-    color: #1A1D1F;
+    color: var(--color-text);
 }
 
 .profile-header {
@@ -248,7 +248,7 @@ label {
 .modal-field label {
     display: block;
     margin-bottom: 0.3rem;
-    color: #961414;
+    color: var(--color-heading);
 }
 
 .modal-field input {
