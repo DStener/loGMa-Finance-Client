@@ -11,6 +11,34 @@ input {
     border: 1px, solid;
 }
 
+.sort-controls {
+    display: flex;
+    gap: 10px;
+    margin: 15px 0;
+    padding: 0 10px;
+    flex-wrap: wrap;
+}
+
+.sort-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 12px;
+    background: var(--primary-dark);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.sort-btn:hover {
+    background: var(--primary);
+}
+
+.sort-btn i {
+    font-size: 1.1em;
+}
+
 .name-input {
     font-size: 1rem;
     font-weight: bold;

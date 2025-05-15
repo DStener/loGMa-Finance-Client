@@ -8,6 +8,22 @@
         <button className="pagination-btn" style="padding-right: 10px;" @click="isWindowShow = true"><i className="ri-add-fill"></i></button>
     </div>
 
+    <!-- Кнопки сортировки -->
+    <div class="sort-controls">
+        <button class="sort-btn" @click="sortBy('data')">
+            <i class="ri-calendar-line"></i> По дате
+            <i :class="getSortIcon('data')"></i>
+        </button>
+        <button class="sort-btn" @click="sortBy('category')">
+            <i class="ri-price-tag-3-line"></i> По категории
+            <i :class="getSortIcon('category')"></i>
+        </button>
+        <button class="sort-btn" @click="sortBy('sum')">
+            <i class="ri-money-dollar-circle-line"></i> По сумме
+            <i :class="getSortIcon('sum')"></i>
+        </button>
+    </div>
+
     <div v-if="isWindowShow" class="win-background">
         <div class="win-main">
             <button class="win-close-btn" @click="this.isWindowShow = false"><i class="ri-close-line"></i></button>
@@ -107,6 +123,8 @@ export default{
     data(){
     return{
 
+        sortField: 'data', // текущее поле сортировки
+        sortDirection: 'desc', // направление сортировки (asc/desc)
         currentPage: 0,
         itemsPerPage: 10,
 
@@ -144,10 +162,36 @@ export default{
             return Math.ceil(this.expenses.length / this.itemsPerPage);
         },
         paginatedExpenses() {
+            // Сортируем перед пагинацией
+            const sorted = [...this.expenses].sort((a, b) => {
+                let valA, valB;
+                
+                // Для сортировки по дате преобразуем в число
+                if (this.sortField === 'data') {
+                    valA = parseInt(a.data);
+                    valB = parseInt(b.data);
+                } 
+                // Для сортировки по сумме преобразуем в число
+                else if (this.sortField === 'sum') {
+                    valA = parseFloat(a.sum);
+                    valB = parseFloat(b.sum);
+                } 
+                // Для категории и описания - строковое сравнение
+                else {
+                    valA = a[this.sortField].toLowerCase();
+                    valB = b[this.sortField].toLowerCase();
+                }
+                
+                if (valA < valB) return this.sortDirection === 'asc' ? -1 : 1;
+                if (valA > valB) return this.sortDirection === 'asc' ? 1 : -1;
+                return 0;
+            });
+            
             const start = this.currentPage * this.itemsPerPage;
             const end = start + this.itemsPerPage;
-            return this.expenses.slice(start, end);
+            return sorted.slice(start, end);
         }
+        
     },
     
     methods:{
@@ -291,6 +335,26 @@ export default{
             } else if (e.key === 'ArrowRight') {
                 this.nextPage();
             }
+        },
+
+        // Метод сортировки
+        sortBy(field) {
+            if (this.sortField === field) {
+                // Если уже сортируем по этому полю, меняем направление
+                this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                // Если новое поле, сортируем по возрастанию
+                this.sortField = field;
+                this.sortDirection = 'asc';
+            }
+            // Сбрасываем страницу на первую при сортировке
+            this.currentPage = 0;
+        },
+        
+        // Метод для отображения иконки сортировки
+        getSortIcon(field) {
+            if (this.sortField !== field) return 'ri-arrow-up-down-line';
+            return this.sortDirection === 'asc' ? 'ri-arrow-up-line' : 'ri-arrow-down-line';
         }
 
     },
