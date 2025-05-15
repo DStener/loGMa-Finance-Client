@@ -2,7 +2,7 @@
     <div class="profile-container">
         <div class="profile-header">
             <div class="avatar-container">
-                <img :src="newAvatar || user.avatar" alt="Аватар пользователя" class="profile-avatar"
+                <img :src="'/api/file/' + user.avatar" alt="Аватар пользователя" class="profile-avatar"
                     @click="avatarChange">
                 <input type="file" ref="avatarInput" @change="avatarUpload" accept="image/*" style="display: none">
                 <button class="avatar-edit-btn" @click="avatarChange">
@@ -20,7 +20,7 @@
                         <label>Имя</label>
                         <input v-if="isEditing" v-model="user.name" type="text" class="edit-input">
                         <div v-else class="field-value">
-                            {{ user.name || 'Не указано' }}
+                            {{user.name}}
                         </div>
                     </div>
                     
@@ -28,7 +28,7 @@
                         <label>Фамилия</label>
                         <input v-if="isEditing" v-model="user.surname" type="text" class="edit-input">
                         <div v-else class="field-value">
-                            {{ user.surname || 'Не указано' }}
+                            {{user.surname}}
                         </div>
                     </div>
                     
@@ -36,7 +36,7 @@
                         <label>Отчество</label>
                         <input v-if="isEditing" v-model="user.patronymic" type="text" class="edit-input">
                         <div v-else class="field-value">
-                            {{ user.patronymic || 'Не указано' }}
+                            {{user.patronymic}}
                         </div>
                     </div>
                     
@@ -44,7 +44,7 @@
                         <label>Дата рождения</label>
                         <input v-if="isEditing" v-model="user.birthday" type="date" class="edit-input">
                         <div v-else class="field-value">
-                            {{ user.birthday || 'Не указано' }}
+                            {{user.birthday}}
                         </div>
                     </div>
                     
@@ -115,7 +115,6 @@ export default {
             showPasswordChangeModal: false,
             currentPassword: '',
             newPassword: '',
-            newAvatar: null,
             isWindowShow: false,
             user: {
                 login: 'darkedoviz',
@@ -145,13 +144,15 @@ export default {
 
         if (status != 200) { return; }
 
-        this.login = data.login;
-        this.name = data.name;
-        this.surname = data.surname;
-        this.patronymic = data.patronymicж
-        this.birthday = data.birthday;
-        this.password = data.password;
-        this.avatar = `/api/file/${data.avatar}`;
+        this.user.login = data.login;
+        this.user.name = data.name;
+        this.user.surname = data.surname;
+        this.user.patronymic = data.patronymic;
+        this.user.birthday = data.birthday;
+        this.user.password = data.password;
+        this.user.avatar = data.avatar;
+
+        console.log(this.avatar);
     },
 
     methods: {
@@ -159,30 +160,54 @@ export default {
             this.originalUser = JSON.parse(JSON.stringify(this.user));
             this.isEditing = true;
         },
-        saveChanges() {
-            if (this.newAvatar) {
-                this.user.avatar = this.newAvatar;
-                this.newAvatar = null;
-            }
+        async saveChanges() {
+            console.log("END CHENGE");
             this.isEditing = false;
+
+            let form = new FormData();
+
+            form.append("login", this.user.login);
+            form.append("name", this.user.name);
+            form.append("surname", this.user.surname);
+            form.append("patronymic", this.user.patronymic);
+            form.append("birthday", this.user.birthday);
+            form.append("password", this.user.password);
+            form.append("avatar", this.user.avatar);
+
+            const response = await fetch('/api/auth/me', {method: 'PUT', body: form});
+            const status = await response.status;
+            const data = await response.json();
+            
+            if(status != 200) { return; }
+            
+            location.reload()
+            
         },
         cancelChanges() {
             this.user = JSON.parse(JSON.stringify(this.originalUser));
-            this.newAvatar = null;
             this.isEditing = false;
         },
 
         avatarChange() {
             this.$refs.avatarInput.click();
         },
-        avatarUpload(event) {
+        async avatarUpload(event) {
             const file = event.target.files[0];
             if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    this.newAvatar = e.target.result;
-                };
-                reader.readAsDataURL(file);
+                
+                let form = new FormData();
+
+                form.append("file", file);
+                form.append("description", "User avatar");
+
+                const response = await fetch('/api/file/', {method: 'POST', body: form});
+                const status = await response.status;
+                const data = await response.json();
+                
+                if(status != 200) { return; }
+                
+                this.user.avatar = data.id;
+                this.saveChanges();
             }
         },
 
