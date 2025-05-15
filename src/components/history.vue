@@ -16,7 +16,7 @@
             <input type="text" v-model="category" placeholder="категория">
             <input type="text" v-model="sum" placeholder="сумма">
             <input type="text" v-model="Description" placeholder="описание" className="inp-description">
-            <button  @click="sendData()"  className="btn-add">добавить</button>
+            <button  @click="sendData(), isWindowShow = false"  className="btn-add">добавить</button>
         </div>
     </div>
     
@@ -30,7 +30,7 @@
         </div>
 
         <div v-for="(el, index) in expenses" :key="index">
-        <h3 id="date" v-if="el.data[index] != el.data[index - 1] || index == '0'" className="date" style="display: block;">{{el.viweData}}</h3>
+        <h3 id="date" v-if="index === 0 || el.data !== expenses[index - 1].data" className="date" style="display: block;">{{el.viweData}}</h3>
         
         <div className="table-line">
             <div className="category">
@@ -169,7 +169,7 @@ export default{
         this.resetInput();
         }
         
-        this.closeDiv()
+        // this.closeDiv()
     },
     
     resetInput(){
@@ -179,14 +179,14 @@ export default{
         this.Description = '';
     },
 
-    showDiv(){
-        isWindowShow = "block";
-        if(document.getElementById('add').style.display == "block") closeDiv();
-    },
+    // showDiv(){
+    //     isWindowShow = "block";
+    //     if(document.getElementById('add').style.display == "block") closeDiv();
+    // },
 
-    closeDiv(){
-        document.getElementById('add').style.display = "none";
-    },
+    // closeDiv(){
+    //     document.getElementById('add').style.display = "none";
+    // },
 
     toggleCategoryEdit(index) {
         if (this.expenses[index].isEditing) {
