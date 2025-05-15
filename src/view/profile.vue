@@ -16,18 +16,45 @@
                 <p class="email">{{ user.email }}</p>
 
                 <div class="profile-fields">
-                    <div class="field" v-for="field in editableFields" :key="field.key">
-                        <label>{{ field.label }}</label>
-                        <input v-if="isEditing && field.editable" v-model="user[field.key]" :type="field.type"
-                            class="edit-input">
-                        <div v-else-if="field.key === 'password'" class="password-field">
+                    <div class="field">
+                        <label>Имя</label>
+                        <input v-if="isEditing" v-model="user.name" type="text" class="edit-input">
+                        <div v-else class="field-value">
+                            {{ user.name || 'Не указано' }}
+                        </div>
+                    </div>
+                    
+                    <div class="field">
+                        <label>Фамилия</label>
+                        <input v-if="isEditing" v-model="user.surname" type="text" class="edit-input">
+                        <div v-else class="field-value">
+                            {{ user.surname || 'Не указано' }}
+                        </div>
+                    </div>
+                    
+                    <div class="field">
+                        <label>Отчество</label>
+                        <input v-if="isEditing" v-model="user.patronymic" type="text" class="edit-input">
+                        <div v-else class="field-value">
+                            {{ user.patronymic || 'Не указано' }}
+                        </div>
+                    </div>
+                    
+                    <div class="field">
+                        <label>Дата рождения</label>
+                        <input v-if="isEditing" v-model="user.birthday" type="date" class="edit-input">
+                        <div v-else class="field-value">
+                            {{ user.birthday || 'Не указано' }}
+                        </div>
+                    </div>
+                    
+                    <div class="field">
+                        <label>Пароль</label>
+                        <div class="password-field">
                             ********
                             <button class="change-password-btn" @click="showPasswordModal">
                                 <i class="ri-key-line"></i> Изменить пароль
                             </button>
-                        </div>
-                        <div v-else class="field-value">
-                            {{ user[field.key] || 'Не указано' }}
                         </div>
                     </div>
                 </div>
@@ -105,7 +132,6 @@ export default {
                 { key: 'surname', label: 'Фамилия', type: 'text', editable: true },
                 { key: 'patronymic', label: 'Отчество', type: 'text', editable: true },
                 { key: 'birthday', label: 'Дата рождения', type: 'date', editable: true },
-                { key: 'password', label: 'Пароль', type: 'password', editable: false }
             ],
             originalUser: {}
         };
