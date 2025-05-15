@@ -23,6 +23,14 @@
   /* color: var(); */
 }
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  font-weight: normal;
+}
+
 /* color palette from <https://github.com/vuejs/theme> */
 :root {
   --vt-c-white: #ffffff;
@@ -86,15 +94,6 @@
   --color-text: var(--vt-c-text-dark-2);
 }
 
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  font-weight: normal;
-}
-
 body {
   min-height: 100vh;
   color: var(--color-text);
@@ -128,6 +127,10 @@ body {
   width: 100%;
   max-width: 1200px;
   padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .block {

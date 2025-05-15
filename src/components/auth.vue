@@ -129,6 +129,7 @@ export default {
             e.preventDefault();
         
             const path = (this.isLoginMode)? "/api/auth/login" : "/api/auth/reg";
+            const redirect = (this.isLoginMode)? "/me" : "/auth";
 
             const form = document.getElementById("auth");
             const formData = new FormData(form);
@@ -144,9 +145,10 @@ export default {
 
             if(status != 200 && status != 201) {
                 this.errorMessages = data.message;
-
                 console.log(data)
             };
+
+            document.location.pathname = redirect;
         }
     }
     }
