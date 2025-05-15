@@ -204,8 +204,6 @@ export default {
             }
         },
 
-
-        
         async logout() {
 
             const response = await fetch('/api/auth/out', {method: 'POST'});
