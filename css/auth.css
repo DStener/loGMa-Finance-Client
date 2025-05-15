@@ -29,16 +29,19 @@
     color: var(--vt-c-white);
 }
 
-.form-group label, .form-label {
+.form-group label,
+.form-label {
     display: block;
     margin-bottom: 8px;
     font-weight: 500;
+    color: var(--color-text);
 }
 
-.form-group input, .form-input {
+.form-group input,
+.form-input {
     width: 100%;
     padding: 12px 15px;
-    border: 1px solid #11111157;
+    border: 1px solid #00000057;
     border-radius: 8px;
     font-size: 1rem;
     background-color: var(--color-background-mute);
@@ -60,10 +63,10 @@
 }
 
 .btn-submit:hover {
-background-color: var(--primary-dark);
+    background-color: var(--primary-dark);
 }
 
-.auth-footer{
+.auth-footer {
     margin-top: 14px;
     text-align: center;
 }
@@ -78,7 +81,7 @@ background-color: var(--primary-dark);
 }
 
 @media (max-width: 576px) {
-.auth-card {
-    padding: 30px 20px;
-}
+    .auth-card {
+        padding: 30px 20px;
+    }
 }

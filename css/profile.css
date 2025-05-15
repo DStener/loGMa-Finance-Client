@@ -1,5 +1,5 @@
 .profile-container {
-    background-color: var(--card-bg);
+    background-color: var(--color-background-soft);
     border-radius: var(--border-radius);
     padding: 1.5rem;
     box-shadow: var(--box-shadow);
@@ -100,7 +100,7 @@
 label {
     font-weight: 500;
     margin-bottom: 0.3rem;
-    color: #000000;
+    color: var(--color-text);
     font-size: 0.9rem;
 }
 
@@ -108,7 +108,7 @@ label {
 .password-field {
     padding: 0.5rem 0;
     font-size: 0.95rem;
-    color: #1A1D1F;
+    color: var(--color-heading);
 }
 
 .edit-input {
