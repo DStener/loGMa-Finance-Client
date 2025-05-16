@@ -133,7 +133,7 @@ body {
 }
 
 .block {
-  width: 100%;
+  max-width: calc(100vw - 2rem);
   height: min-content;
   border-radius: 0.5rem;
   padding: 20px;

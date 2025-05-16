@@ -105,12 +105,30 @@
             </div>
         </div>
     </div>
+
     <div class="block color-back absolute">
+
         <h2>Группы</h2>
-        <button class="btn-small anchor top right green">
-            <i class="ri-add-line"></i> Создать
+
+        <button class="btn anchor top right green">
+            <i class="ri-add-line"></i>
+            Создать
         </button>
-        <h2>Группы</h2>
+
+
+        <div v-if="groups.length" class="div-groups">
+
+            <div v-for="(group, index) in groups" class="wall-groups">
+                <h3 class="num">{{index + 1}}</h3>
+                <h3 class="name">{{group.name}}</h3>
+                <div class="lsit-avatars">
+                    <image v-for="avatar in group.users_avatar" class="user-group-avatar" :src="'/api/file/' + avatar"></image>
+                </div>
+            </div>
+
+        </div>
+        <h3 v-if="!groups.length" class="no-groups">Вы не состоите ни в одной из групп</h3>
+
     </div>
 </div>
 </template>
@@ -126,13 +144,13 @@ export default {
             newPassword: '',
             isWindowShow: false,
             user: {
-                login: 'darkedoviz',
-                email: 'user@example.com',
-                name: 'Иван',
-                surname: 'Иванов',
-                patronymic: 'Иванович',
-                birthday: '1990-01-01',
-                password: 'securepassword123',
+                login: null,
+                email: null,
+                name: null,
+                surname: null,
+                patronymic: null,
+                birthday: null,
+                password: null,
                 avatar: null,
             },
             editableFields: [
@@ -141,7 +159,10 @@ export default {
                 { key: 'patronymic', label: 'Отчество', type: 'text', editable: true },
                 { key: 'birthday', label: 'Дата рождения', type: 'date', editable: true },
             ],
-            originalUser: {}
+            originalUser: {},
+            groups: [
+                //{id: 2, name: "ЗОЖники", users_avatar: [1]},
+            ],
         };
     },
     // Check that user is logined
