@@ -13,13 +13,13 @@
 
             <div class="profile-info">
                 <h2 v-if="!isEditing">{{ user.login }}</h2>
-                <input v-else v-model="user.login" class="edit-input login-input">
+                <input v-else v-model="user.login" >
                 <p class="email">{{ user.email }}</p>
 
                 <div class="profile-fields">
                     <div class="field">
                         <label>Имя</label>
-                        <input v-if="isEditing" v-model="user.name" type="text" class="edit-input">
+                        <input v-if="isEditing" v-model="user.name" type="text" >
                         <div v-else class="field-value">
                             {{user.name}}
                         </div>
@@ -27,7 +27,7 @@
                     
                     <div class="field">
                         <label>Фамилия</label>
-                        <input v-if="isEditing" v-model="user.surname" type="text" class="edit-input">
+                        <input v-if="isEditing" v-model="user.surname" type="text" >
                         <div v-else class="field-value">
                             {{user.surname}}
                         </div>
@@ -35,7 +35,7 @@
                     
                     <div class="field">
                         <label>Отчество</label>
-                        <input v-if="isEditing" v-model="user.patronymic" type="text" class="edit-input">
+                        <input v-if="isEditing" v-model="user.patronymic" type="text" >
                         <div v-else class="field-value">
                             {{user.patronymic}}
                         </div>
@@ -43,7 +43,7 @@
                     
                     <div class="field">
                         <label>Дата рождения</label>
-                        <input v-if="isEditing" v-model="user.birthday" type="date" class="edit-input">
+                        <input v-if="isEditing" v-model="user.birthday" type="date" >
                         <div v-else class="field-value">
                             {{user.birthday}}
                         </div>

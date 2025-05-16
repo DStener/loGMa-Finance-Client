@@ -170,23 +170,40 @@ body {
 .center {
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: 1rem;
 }
 
-.absolute {position: relative;}
-.anchor { position: absolute; }
+.absolute {
+  position: relative;
+}
 
-.anchor.top { top: var(--indentation-margin); }
-.anchor.bottom { bottom: var(--indentation-margin); }
-.anchor.right { right: var(--indentation-margin); }
-.anchor.left { left: var(--indentation-margin); }
+.anchor {
+  position: absolute;
+}
+
+.anchor.top {
+  top: var(--indentation-margin);
+}
+
+.anchor.bottom {
+  bottom: var(--indentation-margin);
+}
+
+.anchor.right {
+  right: var(--indentation-margin);
+}
+
+.anchor.left {
+  left: var(--indentation-margin);
+}
 
 .green-fill {
   background-color: var(--primary);
   color: white;
 }
 
-.green{
-  background-color: rgba(0,0,0,0);
+.green {
+  background-color: rgba(0, 0, 0, 0);
   border: thin solid var(--primary);
   color: var(--primary);
 }
