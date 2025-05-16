@@ -12,6 +12,7 @@
   --border-radius: 0.5rem;
   --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   --transition: all 0.3s ease;
+  --indentation-margin: 20px;
 }
 
 * {
@@ -133,14 +134,61 @@ body {
 
 .block {
   width: 100%;
-  height: 70px;
+  height: min-content;
   border-radius: 0.5rem;
+  padding: 20px;
 }
 
 .color-back {
   background-color: var(--color-background-soft);
 }
 
+.div-adaptive-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.btn {
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--border-radius);
+  gap: 0.3rem;
+  font-size: 0.9rem;
+  transition: var(--transition);
+  border: none;
+}
+
+.btn-small {
+  padding: 0.6rem;
+  border-radius: var(--border-radius);
+  gap: 0.3rem;
+  font-size: 0.9rem;
+  transition: var(--transition);
+  border: none;
+}
+
+.absolute {
+  position: relative;
+}
+
+.anchor {
+  position: absolute;
+}
+
+.anchor.top { top: var(--indentation-margin); }
+.anchor.bottom { bottom: var(--indentation-margin); }
+.anchor.right { right: var(--indentation-margin); }
+.anchor.left { left: var(--indentation-margin); }
+
+.green-fill {
+  background-color: var(--primary);
+  color: white;
+}
+
+.green{
+  background-color: rgba(0,0,0,0);
+  border: thin solid var(--primary);
+  color: var(--primary);
+}
 
 .container {
   max-width: 1200px;

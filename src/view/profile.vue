@@ -1,4 +1,5 @@
 <template>
+<div class="div-adaptive-grid">
     <div class="profile-container">
         <div class="profile-header">
             <div class="avatar-container">
@@ -104,6 +105,14 @@
             </div>
         </div>
     </div>
+    <div class="block color-back absolute">
+        <h2>Группы</h2>
+        <button class="btn-small anchor top right green">
+            <i class="ri-add-line"></i> Создать
+        </button>
+        <h2>Группы</h2>
+    </div>
+</div>
 </template>
 
 <script>
