@@ -56,7 +56,7 @@
                         </div>
                     </div>
                     <div className="progress-container">
-                        <div className="progress-bar" :style="{ width: category.percentage + '%', background: category.color }"></div>
+                        <div className="progress-bar-2" :style="{ width: category.percentage + '%', background: category.color }"></div>
                     </div>
                 </li>
             </ul>
