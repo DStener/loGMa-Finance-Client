@@ -42,7 +42,7 @@
                     <i :class="themeIcon"></i>
                 </button>
 
-                <router-link v-if="isAuth === 1" to="/profile" class="user-profile"
+                <router-link v-if="isAuth === 1" to="/me" class="user-profile"
                     :class="{ 'white-icon': isMenuOpen }">
                     <img v-if="userAvatar" :src="userAvatar" alt="User avatar" class="avatar" />
                     <i v-else class="ri-user-line"></i>
