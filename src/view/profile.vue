@@ -182,25 +182,7 @@ export default {
             ],
         };
     },
-    // Check that user is logined
-    // mounted: async function () {
 
-    //     const response = await fetch('/api/auth/me');
-    //     const status = await response.status;
-    //     const data = await response.json();
-
-    //     if (status != 200) { return; }
-
-    //     this.user.login = data.login;
-    //     this.user.name = data.name;
-    //     this.user.surname = data.surname;
-    //     this.user.patronymic = data.patronymic;
-    //     this.user.birthday = data.birthday;
-    //     this.user.password = data.password;
-    //     this.user.avatar = data.avatar;
-
-    //     console.log(this.avatar);
-    // },
 
     mounted() {
         // Get user info
@@ -261,7 +243,7 @@ export default {
             form.append("password", this.user.password);
             form.append("avatar", this.user.avatar);
 
-            const response = await fetch('/api/auth/me', {method: 'PUT', body: form});
+            const response = await fetch('/api/user/update', {method: 'PUT', body: form});
             const status = await response.status;
             const data = await response.json();
             
