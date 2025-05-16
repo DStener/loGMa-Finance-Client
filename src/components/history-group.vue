@@ -1,6 +1,6 @@
 <template>
     <!-- История операций -->
-    <section class="history-section">
+    <section v-if="id_wall" class="history-section">
     <div class="header-table">
         <h2 class="section-title">
         <i class="ri-file-list-2-fill"></i> История расходов
@@ -117,6 +117,9 @@ export default{
     data(){
     return{
 
+        id_wall: null,
+        is_group: null,
+
         sortedIndices: [], // Массив индексов после сортировки
 
         sortField: 'data', 
@@ -128,30 +131,61 @@ export default{
         isEditWindowShow: false,
         error: '',
         expenses: [
-            {data:'12052020', viweData:'12 мая', category:'Транспорт', sum:'35', Description:'проезд в маршрутке', user: '4erepashka_Pashka'},
-            {data:'12052020', viweData:'12 мая',  category:'Продукты', sum:'1500', Description:'продукты в 5-чке', user: '4erepashka_Pashka'},
-            {data:'12052020', viweData:'12 мая', category:'Развлечения', sum:'700', Description:'билеты в кино + попкорн', user: 'Амогус'},
-            {data:'10052020', viweData:'10 мая', category:'Транспорт', sum:'35', Description:'проезд в маршрутке', user: 'Юля'},
-            {data:'10052020', viweData:'10 мая', category:'Продукты', sum:'1500', Description:'продукты в 5-чке', user: 'Амогус'},
-            {data:'10052020', viweData:'10 мая', category:'Развлечения', sum:'700', Description:'билеты в кино + попкорн', user: '4erepashka_Pashka'},
-            {data:'6052020', viweData:'6 мая', category:'Транспорт', sum:'35', Description:'проезд в маршрутке', user: '4erepashka_Pashka'},
-            {data:'6052020', viweData:'6 мая', category:'Продукты', sum:'1500', Description:'продукты в 5-чке', user: '4erepashka_Pashka'},
-            {data:'6052020', viweData:'6 мая', category:'Развлечения', sum:'700', Description:'билеты в кино + попкорн', user: '4erepashka_Pashka'},
-            {data:'12052020', viweData:'12 мая', category:'Транспорт', sum:'35', Description:'проезд в маршрутке', user: 'Сергей'},
-            {data:'12052020', viweData:'12 мая',  category:'Продукты', sum:'1500', Description:'продукты в 5-чке', user: '4erepashka_Pashka'},
-            {data:'12052020', viweData:'12 мая', category:'Развлечения', sum:'700', Description:'билеты в кино + попкорн', user: 'Сергей'},
-            {data:'10052020', viweData:'10 мая', category:'Транспорт', sum:'35', Description:'проезд в маршрутке', user: 'Сергей'},
-            {data:'10052020', viweData:'10 мая', category:'Продукты', sum:'1500', Description:'продукты в 5-чке', user: '4erepashka_Pashka'},
-            {data:'10052020', viweData:'10 мая', category:'Развлечения', sum:'700', Description:'билеты в кино + попкорн', user: '4erepashka_Pashka'},
-            {data:'6052020', viweData:'6 мая', category:'Транспорт', sum:'35', Description:'проезд в маршрутке', user: '4erepashka_Pashka'},
-            {data:'6052020', viweData:'6 мая', category:'Продукты', sum:'1500', Description:'продукты в 5-чке', user: '4erepashka_Pashka'},
-            {data:'6052020', viweData:'6 мая', category:'Развлечения', sum:'700', Description:'билеты в кино + попкорн', user: '4erepashka_Pashka'},
+            // {data:'12052020', viweData:'12 мая', category:'Транспорт', sum:'35', Description:'проезд в маршрутке', user: '4erepashka_Pashka'},
+            // {data:'12052020', viweData:'12 мая',  category:'Продукты', sum:'1500', Description:'продукты в 5-чке', user: '4erepashka_Pashka'},
+            // {data:'12052020', viweData:'12 мая', category:'Развлечения', sum:'700', Description:'билеты в кино + попкорн', user: 'Амогус'},
+            // {data:'10052020', viweData:'10 мая', category:'Транспорт', sum:'35', Description:'проезд в маршрутке', user: 'Юля'},
+            // {data:'10052020', viweData:'10 мая', category:'Продукты', sum:'1500', Description:'продукты в 5-чке', user: 'Амогус'},
+            // {data:'10052020', viweData:'10 мая', category:'Развлечения', sum:'700', Description:'билеты в кино + попкорн', user: '4erepashka_Pashka'},
+            // {data:'6052020', viweData:'6 мая', category:'Транспорт', sum:'35', Description:'проезд в маршрутке', user: '4erepashka_Pashka'},
+            // {data:'6052020', viweData:'6 мая', category:'Продукты', sum:'1500', Description:'продукты в 5-чке', user: '4erepashka_Pashka'},
+            // {data:'6052020', viweData:'6 мая', category:'Развлечения', sum:'700', Description:'билеты в кино + попкорн', user: '4erepashka_Pashka'},
+            // {data:'12052020', viweData:'12 мая', category:'Транспорт', sum:'35', Description:'проезд в маршрутке', user: 'Сергей'},
+            // {data:'12052020', viweData:'12 мая',  category:'Продукты', sum:'1500', Description:'продукты в 5-чке', user: '4erepashka_Pashka'},
+            // {data:'12052020', viweData:'12 мая', category:'Развлечения', sum:'700', Description:'билеты в кино + попкорн', user: 'Сергей'},
+            // {data:'10052020', viweData:'10 мая', category:'Транспорт', sum:'35', Description:'проезд в маршрутке', user: 'Сергей'},
+            // {data:'10052020', viweData:'10 мая', category:'Продукты', sum:'1500', Description:'продукты в 5-чке', user: '4erepashka_Pashka'},
+            // {data:'10052020', viweData:'10 мая', category:'Развлечения', sum:'700', Description:'билеты в кино + попкорн', user: '4erepashka_Pashka'},
+            // {data:'6052020', viweData:'6 мая', category:'Транспорт', sum:'35', Description:'проезд в маршрутке', user: '4erepashka_Pashka'},
+            // {data:'6052020', viweData:'6 мая', category:'Продукты', sum:'1500', Description:'продукты в 5-чке', user: '4erepashka_Pashka'},
+            // {data:'6052020', viweData:'6 мая', category:'Развлечения', sum:'700', Description:'билеты в кино + попкорн', user: '4erepashka_Pashka'},
         ],
         data:'',
         category:'',
         sum:'',
         Description:''
     }
+    },
+
+    // Check that user is logined
+    mounted: async function () {
+
+        const path = window.location.pathname;
+
+        // Check, that is group
+        if( path.startsWith('/wall/') ) {
+            let _temp = path.substring(path.lastIndexOf('/') + 1);
+
+            this.id_wall = _temp;
+            this.is_group = true;
+            return;
+        }
+
+        const response = await fetch('/api/wall/my');
+        const status = await response.status;
+        const data = await response.json();
+
+        if (status != 200) { return; }
+
+        for(let i = 0; i < data.length; ++i) {
+            if(data[i].is_group == "f" && data[i].is_public == "f") {
+                this.id_wall = data[i].id;
+                this.is_group = false;
+                break;
+            }
+        }
+
+        this.get_operation();
     },
 
     computed: {
@@ -192,6 +226,39 @@ export default{
     },
     
     methods:{
+        async get_operation() {
+
+            console.log("THIS");
+            console.log(this.id_wall);
+
+            const response = await fetch(`/api/wall/operations?id_wall=${this.id_wall}`);
+            const status = await response.status;
+            const data = await response.json();
+
+            if (status != 200) { return; }
+
+            if(data.length == 0) {
+                return;
+            }
+
+            for(let i = 0; i < data.length; i++) {
+
+                const obj = {
+                    data:'12052020', 
+                    viweData:'null', 
+                    category:'null', 
+                    sum: data[i].value, 
+                    Description:'null', 
+                    user: 'null'
+                };
+
+                expenses.append(obj);
+            }
+
+            
+        },
+
+
         openEditWindow(index) {
             this.editingIndex = index;
             this.editingItem = {...this.expenses[index]};
@@ -228,7 +295,7 @@ export default{
             }
         },
 
-        sendData(){
+        async sendData(){
             let dmont = '';
             let months = [
             'января',
@@ -294,19 +361,41 @@ export default{
 
             num = parseInt(num);
 
+            const form = new FormData();
+            form.append("value", this.sum);
+            form.append("id_currency", '1');
+            form.append("id_wall", this.id_wall);
+            // form.append("time", num);
+
+            const requestOptions = {
+                method: 'POST',
+                body: form,
+            };  
+
+            console.log("PRINT");
+
+            const response = await fetch("/api/opreation/create", requestOptions);
+            const status = await response.status;
+            const data = await response.json();
+
+            console.log(data);
+
             this.error = '';
             this.expenses.push({
-            data: num,
-            viweData: dmont,
-            category: this.category,
-            sum: this.sum,
-            Description: this.Description,
-            isEditing: false,
-            editedName: this.category
+                data: num,
+                viweData: dmont,
+                category: this.category,
+                sum: this.sum,
+                Description: this.Description,
+                isEditing: false,
+                editedName: this.category
             })
 
+            
+
+
             if(this.error == ''){
-            this.resetInput();
+                this.resetInput();
             }
             
         },
@@ -362,9 +451,9 @@ export default{
 
     },
 
-    mounted() {
-        window.addEventListener('keydown', this.handleKeyDown);
-    },
+    // mounted() {
+    //     window.addEventListener('keydown', this.handleKeyDown);
+    // },
     beforeDestroy() {
         window.removeEventListener('keydown', this.handleKeyDown);
     }
