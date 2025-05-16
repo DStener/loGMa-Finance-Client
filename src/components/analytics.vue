@@ -11,13 +11,17 @@
                 gap: 12px;
                 margin-left: 20px;
             ">   
-                <button class="pagination-btn" @click="isWindowShow2 = true">
+                <button 
+                v-if="(showButton === true) || (showButton2 ===true && isAdmin === true)" 
+                class="pagination-btn" @click="isWindowShow2 = true">
                     <i class="ri-add-fill"></i>
                 </button>
                 <button class="pagination-btn" @click="toggleChartExpand">
                     <i class="fas" :class="isChartExpanded ? 'ri-arrow-down-s-line' : 'ri-arrow-up-s-line'"></i>
                 </button>
-                <button class="pagination-btn" @click="isWindowShowCategoryManage = true">
+                <button 
+                v-if="(showButton === true) || (showButton2 ===true && isAdmin === true)"
+                class="pagination-btn" @click="isWindowShowCategoryManage = true">
                     <i class="ri-progress-6-line"></i>
                 </button>
             </div>
@@ -82,6 +86,7 @@ export default {
     },
     data() {
         return {
+            isAdmin: false,
             categoryName: "",
             categoryLimit: null,
             isChartExpanded: false,
@@ -99,6 +104,15 @@ export default {
             ],
             chart: null
         };
+    },
+    computed: {
+    showButton() {
+        return this.$route.path === '/my'; 
+        },
+        showButton2() {
+        return this.$route.path === '/group'; 
+        }
+        
     },
     methods: {
         toggleChartExpand() {

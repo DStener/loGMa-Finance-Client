@@ -29,7 +29,7 @@ const router = createRouter({
     { path: '/:pathMatch(.*)*', component: notfound },
     { path: '/analytics', component: analytics },
     { path: '/history', component: history },
-    { path: '/groups', component: groupwall },
+    { path: '/group', component: groupwall },
     { path: '/stats', component: analytics },
     { path: '/history-group', component: historyGroup },
     { path: '/ls', component: mwinLS },

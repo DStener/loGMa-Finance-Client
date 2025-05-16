@@ -72,7 +72,7 @@
             </div>
 
             <input type="text" class="color-input" v-model="Description" placeholder="описание">
-            <button @click="sendData()" class="btn-add">добавить</button>
+            <button @click="sendData()" class="btn-add">Добавить</button>
             <h1 class="error">{{error}}</h1>
         </div>
     </div>

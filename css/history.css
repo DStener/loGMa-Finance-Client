@@ -124,7 +124,8 @@
     padding: 1rem;
     border-radius: var(--border-radius);
     cursor: pointer;
-    /* display: flex; */
+    display: flex;
+    justify-content: center;
     align-items: center;
     gap: 0.5rem;
     font-size: 0.9rem;
