@@ -9,7 +9,7 @@
 
                 <div class="logo" :class="{ 'white-icon': isMenuOpen }">
                     <img src="/src/assets/favicon.png" class="logo" />
-                    <span>loGMa</span>
+                    <span>LoGMa</span>
                 </div>
             </div>
 
@@ -31,16 +31,7 @@
                         </router-link>
                     </div>
                 </details>
-                <details v-if="isAuth === 1 && isAdmin === 1 && isGroup === 1" class="nav-details">
-                    <summary class="nav-summary">
-                        <i class="ri-user-settings-line"></i>Управление группой
-                    </summary>
-                    <div class="nav-dropdown">
-                        <span class="nav-link"><i class="ri-user-shared-2-line"></i> Управление участниками</span>
-                        <span class="nav-link"><i class="ri-file-edit-line"></i> Редактировать бюджет</span>
-                    </div>
-
-                </details>
+                
                 <button  v-if="isAuth === 1 && isGroup === 1"   class="invite-btn nav-details">Пригласить</button>
 
             </nav>
@@ -70,7 +61,6 @@
 
 <script>
 export default {
-    name: 'AppHeader',
     data() {
         return {
             isMenuOpen: false,

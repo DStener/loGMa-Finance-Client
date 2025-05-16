@@ -1,7 +1,7 @@
 <template>
-    <div v-if="isWindowShow" class="win-background">
+    <div class="win-background">
         <div class="win-main">
-            <button class="win-close-btn" @click="isWindowShow = false"><i class="ri-close-line"></i></button>
+            <button class="win-close-btn" @click="$emit('close')"><i class="ri-close-line"></i></button>
             
             <div class="limits-container">
                 <h2>Управление лимитами</h2>
@@ -17,24 +17,21 @@
                 <div class="limit-section">
                     <div class="category-row">
                         <select v-model="selectedCategory">
-                            <option v-for="category in categories">
+                            <option v-for="category in categories" :value="category.name">
                                 {{ category.name }}
                             </option>
                         </select>
                         <div class="category-limit">
                             <span v-if="!isEditing">{{ getCurrentCategoryLimit() }}</span>
-                            <input v-else v-model="getCurrentCategory().limit" type="number">
+                            <input v-else v-model="currentCategory.limit" type="number">
                         </div>
                     </div>
                 </div>
                 
                 <div class="actions">
-                    <button @click="isEditing = isEditing ? 0 : 1" class="edit-btn">
+                    <button @click="toggleEdit" class="edit-btn">
                         {{ isEditing ? 'Сохранить' : 'Редактировать' }}
                     </button>
-                    <!-- <button v-if="isEditing" @click="isEditing=0" class="cancel-btn">
-                        Стоп
-                    </button> -->
                 </div>
             </div>
         </div>
@@ -44,27 +41,36 @@
 <script>
 export default {
     name: 'LimitsSetting',
+    props: {
+        categories: {
+            type: Array,
+            required: true
+        }
+    },
     data() {
         return {
-            isWindowShow: true,
             isEditing: false,
             mainLimit: 10000,
             selectedCategory: '',
-            categories: [
-                { name: 'Еда', limit: 3000 },
-                { name: 'Транспорт', limit: 2000 },
-                { name: 'Развлечения', limit: 1500 },
-                { name: 'Одежда', limit: 2500 }
-            ],
+            currentCategory: null
         }
     },
     methods: {
-        getCurrentCategory() {
-            return this.categories.find(cat => cat.name === this.selectedCategory) || {};
-        },
         getCurrentCategoryLimit() {
-            const category = this.getCurrentCategory();
-            return category ? category.limit : null;
+            const category = this.categories.find(cat => cat.name === this.selectedCategory);
+            return category ? category.limit : 'Не выбрано';
+        },
+        toggleEdit() {
+            if (this.isEditing) {
+                // При сохранении можно добавить логику обновления данных
+                this.$emit('update-category', this.currentCategory);
+            }
+            this.isEditing = !this.isEditing;
+        }
+    },
+    watch: {
+        selectedCategory(newVal) {
+            this.currentCategory = this.categories.find(cat => cat.name === newVal);
         }
     }
 }
@@ -77,50 +83,34 @@ export default {
     max-width: 400px;
     margin: 0 auto;
 }
-
 .limit-section {
     margin-bottom: 20px;
 }
-
 .limit-section label {
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
 }
-
 .field-value {
     padding: 8px;
     border-radius: 4px;
 }
-
 .category-row {
     display: flex;
     gap: 10px;
     align-items: center;
 }
-
 .category-limit {
     min-width: 100px;
 }
-
 .actions {
     display: flex;
     gap: 10px;
     margin-top: 20px;
 }
-
 .edit-btn {
     padding: 8px 16px;
     background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.cancel-btn {
-    padding: 8px 16px;
-    background-color: #f44336;
     color: white;
     border: none;
     border-radius: 4px;

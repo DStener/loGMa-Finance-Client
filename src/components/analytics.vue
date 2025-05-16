@@ -10,7 +10,6 @@
                 align-items: center;
                 gap: 12px;
                 margin-left: 20px;
-            /* before 800ps width is work */
             ">   
                 <button class="pagination-btn" @click="isWindowShow2 = true">
                     <i class="ri-add-fill"></i>
@@ -18,22 +17,27 @@
                 <button class="pagination-btn" @click="toggleChartExpand">
                     <i class="fas" :class="isChartExpanded ? 'ri-arrow-down-s-line' : 'ri-arrow-up-s-line'"></i>
                 </button>
+                <button class="pagination-btn" @click="isWindowShowCategoryManage = true">
+                    <i class="ri-progress-6-line"></i>
+                </button>
             </div>
         </div>
+
+
+        <mwinLS  v-if="isWindowShowCategoryManage" :categories="categories"
+            @close="isWindowShowCategoryManage = false" />
 
         <div v-if="isWindowShow2" class="win-background">
             <div class="win-main">
-                <button class="win-close-btn" @click="this.isWindowShow2 = false"><i class="ri-close-line"></i></button>
+                <button class="win-close-btn" @click="isWindowShow2 = false"><i class="ri-close-line"></i></button>
                 <h1>Добавить категорию</h1>
-                <input type="text" style="height: 47px;" v-model="categoryName" placeholder="Название">
-                <input type="number" class="color-input" style="height: 47px;" v-model="categoryLimit" placeholder="Задайте лимит">
-                <button  @click="addCategory()"  className="btn-add">Добавить</button>
+                <input type="text" v-model="categoryName" placeholder="Название">
+                <input type="number" class="color-input" v-model="categoryLimit" placeholder="Задайте лимит">
+                <button @click="addCategory()" className="btn-add">Добавить</button>
             </div>
         </div>
-
         
         <div className="chart-container" id="chart">            
-
             <canvas className="chart-img"></canvas>
         </div>
     
@@ -69,15 +73,20 @@
 </template>
 
 <script>
+import mwinLS from './mwinLS.vue';
 
-    export default {
-        name: 'AnalyticsBlock',
-        data() {
-            return {
+export default {
+    name: 'AnalyticsBlock',
+    components: {
+        mwinLS
+    },
+    data() {
+        return {
             categoryName: "",
             categoryLimit: null,
             isChartExpanded: false,
             isWindowShow2: false,
+            isWindowShowCategoryManage: false,
             lastUpdated: '01.05.2025',
             operationsCount: 24,
             categoriesCount: 8,
@@ -89,34 +98,31 @@
                 { name: 'Жилье', amount: '1,500', percentage: 15, color: '#00FFB4', icon: 'ri-home-9-fill', limit: '10,000' }
             ],
             chart: null
-            };
-        },
-        
-        methods: {
-            
-            toggleChartExpand() {
-                var block = document.getElementById('chart');
-                if (block.style.display == 'none') {
-                    block.style.display = 'block';
-                } else {
-                    block.style.display = 'none';
-                }
-            },
-
-            addCategory(){
-                if (this.categotyName === "") {
-                    alert('Введите название категории');
-                    return;
-                }
-                
-                if (this.categoryLimit === 0 || this.categoryLimit < 0) {
-                    alert('Лимит должен быть выше нуля');
-                    return;
-                }
-                isWindowShow2 = "false"//это после успешной отправки данных
+        };
+    },
+    methods: {
+        toggleChartExpand() {
+            var block = document.getElementById('chart');
+            if (block.style.display == 'none') {
+                block.style.display = 'block';
+            } else {
+                block.style.display = 'none';
             }
+        },
+        addCategory() {
+            if (this.categoryName === "") {
+                alert('Введите название категории');
+                return;
+            }
+            
+            if (this.categoryLimit === 0 || this.categoryLimit < 0) {
+                alert('Лимит должен быть выше нуля');
+                return;
+            }
+            this.isWindowShow2 = false; //это после отправки апи добавить
         }
-    };
+    }
+};
 </script>
 
 <style src="/css/analytics.css"></style>
