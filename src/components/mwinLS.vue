@@ -29,12 +29,12 @@
                 </div>
                 
                 <div class="actions">
-                    <button @click="isEditing=1" class="edit-btn">
+                    <button @click="isEditing = isEditing ? 0 : 1" class="edit-btn">
                         {{ isEditing ? 'Сохранить' : 'Редактировать' }}
                     </button>
-                    <button v-if="isEditing" @click="isEditing=0" class="cancel-btn">
+                    <!-- <button v-if="isEditing" @click="isEditing=0" class="cancel-btn">
                         Стоп
-                    </button>
+                    </button> -->
                 </div>
             </div>
         </div>
@@ -43,7 +43,7 @@
 
 <script>
 export default {
-    name: 'LimitsWindow',
+    name: 'LimitsSetting',
     data() {
         return {
             isWindowShow: true,
