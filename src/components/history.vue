@@ -1,11 +1,11 @@
 <template>
     <!-- История операций -->
-    <section className="history-section">
-    <div className="header-table">
-        <h2 className="section-title">
-        <i className="ri-file-list-2-fill"></i> История расходов
+    <section class="history-section">
+    <div class="header-table">
+        <h2 class="section-title">
+        <i class="ri-file-list-2-fill"></i> История расходов
         </h2>
-        <button className="pagination-btn" style="padding-right: 10px;" @click="isWindowShow = true"><i className="ri-add-fill"></i></button>
+        <button class="pagination-btn" style="padding-right: 10px;" @click="isAddWindowShow = true"><i class="ri-add-fill"></i></button>
     </div>
 
     <!-- Кнопки сортировки -->
@@ -24,19 +24,32 @@
         </button>
     </div>
 
-    <div v-if="isWindowShow" class="win-background">
+    <!-- Окно добавления -->
+    <div v-if="isAddWindowShow" class="win-background">
         <div class="win-main">
-            <button class="win-close-btn" @click="this.isWindowShow = false"><i class="ri-close-line"></i></button>
+            <button class="win-close-btn" @click="isAddWindowShow = false"><i class="ri-close-line"></i></button>
             <h1>Добавить трату</h1>
             <input type="text" class="color-input" v-model="data" placeholder="чч мм гггг">
             <input type="text" class="color-input" v-model="category" placeholder="категория">
             <input type="text" class="color-input" v-model="sum" placeholder="сумма">
-            <input type="text" className="inp-description" v-model="Description" placeholder="описание">
-            <button  @click="sendData(), isWindowShow = false"  className="btn-add">добавить</button>
+            <input type="text" class="inp-description" v-model="Description" placeholder="описание">
+            <button @click="sendData(), isAddWindowShow = false" class="btn-add">добавить</button>
         </div>
     </div>
     
-    <h1 className="error">{{error}}</h1>
+    <!-- Окно редактирования -->
+    <div v-if="isEditWindowShow" class="win-background">
+        <div class="win-main">
+            <button class="win-close-btn" @click="isEditWindowShow = false"><i class="ri-close-line"></i></button>
+            <h1>Редактировать трату</h1>
+            <input type="text" class="color-input" v-model="editingItem.editedCategory" placeholder="категория">
+            <input type="text" class="color-input" v-model="editingItem.editedSum" placeholder="сумма">
+            <input type="text" class="inp-description" v-model="editingItem.editedDescription" placeholder="описание">
+            <button @click="saveChanges()" class="btn-add">сохранить</button>
+        </div>
+    </div>
+    
+    <h1 class="error">{{error}}</h1>
 
     <div class="table-container">
         <div v-if="paginatedExpenses.length === 0" class="yore-histori">
@@ -45,8 +58,8 @@
             </p>
         </div>
 
-      <div v-for="(el, index) in paginatedExpenses" :key="currentPage * itemsPerPage + index">
-        <h3 v-if="shouldShowDate(currentPage * itemsPerPage + index)" 
+    <div v-for="(el, originalIndex) in paginatedExpenses" :key="el.data + '-' + originalIndex">
+        <h3 v-if="shouldShowDate(originalIndex)" 
             class="date" 
             style="display: block;"
         >
@@ -54,37 +67,19 @@
         </h3>        
             <div class="table-line">
                 <div class="category">
-                    <span class="category-badge" v-if="!el.isEditing">{{ el.category }}</span>
-                    <input 
-                        v-else 
-                        v-model="el.editedCategory" 
-                        type="text" 
-                        class="name-input" 
-                        @keyup.enter="saveChanges(currentPage * itemsPerPage + index)">
+                    <span class="category-badge">{{ el.category }}</span>
                 </div>                        
-                <p class="amount" v-if="!el.isEditing">{{ el.sum + " ₽"}}</p>
-                <input 
-                        v-else 
-                        v-model="el.editedSum" 
-                        type="text" 
-                        class="name-input" 
-                        @keyup.enter="saveChanges(currentPage * itemsPerPage + index)">
-                <p class="description" v-if="!el.isEditing">{{ el.Description }}</p>
-                <input 
-                        v-else 
-                        v-model="el.editedDescription" 
-                        type="text" 
-                        class="name-input" 
-                        @keyup.enter="saveChanges(currentPage * itemsPerPage + index)">
+                <p class="amount">{{ el.sum + " ₽"}}</p>
+                <p class="description">{{ el.Description }}</p>
                 <div class="actions">
                     <button 
                         class="btn-icon" 
-                        @click="toggleEdit(currentPage * itemsPerPage + index);">
-                        <i :class="el.isEditing ? 'ri-save-fill' : 'ri-pencil-fill'"></i>
+                        @click="openEditWindow(sortedIndices[currentPage * itemsPerPage + originalIndex])">
+                        <i class="ri-pencil-fill"></i>
                     </button>
                     <button 
                         class="btn-icon" 
-                        @click="removeExpense(currentPage * itemsPerPage + index)"
+                        @click="removeExpense(sortedIndices[currentPage * itemsPerPage + originalIndex])"
                     >
                         <i class="ri-delete-bin-fill"></i>
                     </button>
@@ -111,9 +106,6 @@
             <i class="ri-arrow-right-s-line"></i>
         </button>
         </div>
-        <!-- <a href="historyV7.html" class="btn-all">
-            <i class="ri-file-list-2-fill"></i> Все
-        </a> -->
     </div>
     </section>
 </template>
@@ -123,32 +115,35 @@ export default{
     data(){
     return{
 
-        sortField: 'data', // текущее поле сортировки
-        sortDirection: 'desc', // направление сортировки (asc/desc)
+        sortedIndices: [], // Массив индексов после сортировки
+
+        sortField: 'data', 
+        sortDirection: 'desc', 
         currentPage: 0,
         itemsPerPage: 10,
 
-        isWindowShow: false,
+        isAddWindowShow: false,
+        isEditWindowShow: false,
         error: '',
         expenses: [
-            {data:'12052020', viweData:'12 мая', category:'Транспорт', sum:'35', Description:'проезд в маршрутке'},
-            {data:'12052020', viweData:'12 мая',  category:'Продукты', sum:'1500', Description:'продукты в 5-чке'},
-            {data:'12052020', viweData:'12 мая', category:'Развлечения', sum:'700', Description:'билеты в кино + попкорн'},
-            {data:'10052020', viweData:'10 мая', category:'Транспорт', sum:'35', Description:'проезд в маршрутке'},
-            {data:'10052020', viweData:'10 мая', category:'Продукты', sum:'1500', Description:'продукты в 5-чке'},
-            {data:'10052020', viweData:'10 мая', category:'Развлечения', sum:'700', Description:'билеты в кино + попкорн'},
-            {data:'6052020', viweData:'6 мая', category:'Транспорт', sum:'35', Description:'проезд в маршрутке'},
-            {data:'6052020', viweData:'6 мая', category:'Продукты', sum:'1500', Description:'продукты в 5-чке'},
-            {data:'6052020', viweData:'6 мая', category:'Развлечения', sum:'700', Description:'билеты в кино + попкорн'},
-            {data:'12052020', viweData:'12 мая', category:'Транспорт', sum:'35', Description:'проезд в маршрутке'},
-            {data:'12052020', viweData:'12 мая',  category:'Продукты', sum:'1500', Description:'продукты в 5-чке'},
-            {data:'12052020', viweData:'12 мая', category:'Развлечения', sum:'700', Description:'билеты в кино + попкорн'},
-            {data:'10052020', viweData:'10 мая', category:'Транспорт', sum:'35', Description:'проезд в маршрутке'},
-            {data:'10052020', viweData:'10 мая', category:'Продукты', sum:'1500', Description:'продукты в 5-чке'},
-            {data:'10052020', viweData:'10 мая', category:'Развлечения', sum:'700', Description:'билеты в кино + попкорн'},
-            {data:'6052020', viweData:'6 мая', category:'Транспорт', sum:'35', Description:'проезд в маршрутке'},
-            {data:'6052020', viweData:'6 мая', category:'Продукты', sum:'1500', Description:'продукты в 5-чке'},
-            {data:'6052020', viweData:'6 мая', category:'Развлечения', sum:'700', Description:'билеты в кино + попкорн'},
+            {data:'12052020', viweData:'12 мая', category:'Транспорт', sum:'35', Description:'проезд в маршрутке', user: '4erepashka_Pashka'},
+            {data:'12052020', viweData:'12 мая',  category:'Продукты', sum:'1500', Description:'продукты в 5-чке', user: '4erepashka_Pashka'},
+            {data:'12052020', viweData:'12 мая', category:'Развлечения', sum:'700', Description:'билеты в кино + попкорн', user: 'Амогус'},
+            {data:'10052020', viweData:'10 мая', category:'Транспорт', sum:'35', Description:'проезд в маршрутке', user: 'Юля'},
+            {data:'10052020', viweData:'10 мая', category:'Продукты', sum:'1500', Description:'продукты в 5-чке', user: 'Амогус'},
+            {data:'10052020', viweData:'10 мая', category:'Развлечения', sum:'700', Description:'билеты в кино + попкорн', user: '4erepashka_Pashka'},
+            {data:'6052020', viweData:'6 мая', category:'Транспорт', sum:'35', Description:'проезд в маршрутке', user: '4erepashka_Pashka'},
+            {data:'6052020', viweData:'6 мая', category:'Продукты', sum:'1500', Description:'продукты в 5-чке', user: '4erepashka_Pashka'},
+            {data:'6052020', viweData:'6 мая', category:'Развлечения', sum:'700', Description:'билеты в кино + попкорн', user: '4erepashka_Pashka'},
+            {data:'12052020', viweData:'12 мая', category:'Транспорт', sum:'35', Description:'проезд в маршрутке', user: 'Сергей'},
+            {data:'12052020', viweData:'12 мая',  category:'Продукты', sum:'1500', Description:'продукты в 5-чке', user: '4erepashka_Pashka'},
+            {data:'12052020', viweData:'12 мая', category:'Развлечения', sum:'700', Description:'билеты в кино + попкорн', user: 'Сергей'},
+            {data:'10052020', viweData:'10 мая', category:'Транспорт', sum:'35', Description:'проезд в маршрутке', user: 'Сергей'},
+            {data:'10052020', viweData:'10 мая', category:'Продукты', sum:'1500', Description:'продукты в 5-чке', user: '4erepashka_Pashka'},
+            {data:'10052020', viweData:'10 мая', category:'Развлечения', sum:'700', Description:'билеты в кино + попкорн', user: '4erepashka_Pashka'},
+            {data:'6052020', viweData:'6 мая', category:'Транспорт', sum:'35', Description:'проезд в маршрутке', user: '4erepashka_Pashka'},
+            {data:'6052020', viweData:'6 мая', category:'Продукты', sum:'1500', Description:'продукты в 5-чке', user: '4erepashka_Pashka'},
+            {data:'6052020', viweData:'6 мая', category:'Развлечения', sum:'700', Description:'билеты в кино + попкорн', user: '4erepashka_Pashka'},
         ],
         data:'',
         category:'',
@@ -162,24 +157,23 @@ export default{
             return Math.ceil(this.expenses.length / this.itemsPerPage);
         },
         paginatedExpenses() {
-            // Сортируем перед пагинацией
-            const sorted = [...this.expenses].sort((a, b) => {
+            // Сортируем индексы вместо самих элементов
+            this.sortedIndices = [...Array(this.expenses.length).keys()].sort((a, b) => {
+                const itemA = this.expenses[a];
+                const itemB = this.expenses[b];
                 let valA, valB;
                 
-                // Для сортировки по дате преобразуем в число
                 if (this.sortField === 'data') {
-                    valA = parseInt(a.data);
-                    valB = parseInt(b.data);
+                    valA = parseInt(itemA.data);
+                    valB = parseInt(itemB.data);
                 } 
-                // Для сортировки по сумме преобразуем в число
                 else if (this.sortField === 'sum') {
-                    valA = parseFloat(a.sum);
-                    valB = parseFloat(b.sum);
+                    valA = parseFloat(itemA.sum);
+                    valB = parseFloat(itemB.sum);
                 } 
-                // Для категории и описания - строковое сравнение
                 else {
-                    valA = a[this.sortField].toLowerCase();
-                    valB = b[this.sortField].toLowerCase();
+                    valA = itemA[this.sortField].toLowerCase();
+                    valB = itemB[this.sortField].toLowerCase();
                 }
                 
                 if (valA < valB) return this.sortDirection === 'asc' ? -1 : 1;
@@ -189,16 +183,37 @@ export default{
             
             const start = this.currentPage * this.itemsPerPage;
             const end = start + this.itemsPerPage;
-            return sorted.slice(start, end);
+            
+            // Возвращаем элементы по отсортированным индексам
+            return this.sortedIndices.slice(start, end).map(i => this.expenses[i]);
         }
-        
     },
     
     methods:{
+        openEditWindow(index) {
+            this.editingIndex = index;
+            this.editingItem = {...this.expenses[index]};
+            this.editingItem.editedCategory = this.editingItem.category;
+            this.editingItem.editedSum = this.editingItem.sum;
+            this.editingItem.editedDescription = this.editingItem.Description;
+            this.isEditWindowShow = true;
+        },
+
+        saveChanges() {
+            const item = this.expenses[this.editingIndex];
+            
+            item.category = this.editingItem.editedCategory;
+            item.sum = this.editingItem.editedSum;
+            item.Description = this.editingItem.editedDescription;
+            
+            this.isEditWindowShow = false;
+        },
 
         shouldShowDate(index) {
             if (index === 0) return true;
-            return this.expenses[index]?.data !== this.expenses[index - 1]?.data;
+            const currentIdx = this.sortedIndices[this.currentPage * this.itemsPerPage + index];
+            const prevIdx = this.sortedIndices[this.currentPage * this.itemsPerPage + index - 1];
+            return this.expenses[currentIdx]?.data !== this.expenses[prevIdx]?.data;
         },
         nextPage() {
             if (this.currentPage < this.totalPages - 1) {
@@ -312,18 +327,6 @@ export default{
             }
         },
 
-        saveChanges(index) {
-            if (this.expenses[index].editedCategory.trim()) {
-            this.expenses[index].category = this.expenses[index].editedCategory.trim();
-            }
-            if (this.expenses[index].editedSum.trim()) {
-            this.expenses[index].sum = this.expenses[index].editedSum.trim();
-            }
-            if (this.expenses[index].editedSum.trim()) {
-            this.expenses[index].Description = this.expenses[index].editedDescription.trim();
-            }
-            this.expenses[index].isEditing = false;
-        },
         
         removeExpense(index) {
             this.expenses.splice(index, 1);
@@ -340,18 +343,16 @@ export default{
         // Метод сортировки
         sortBy(field) {
             if (this.sortField === field) {
-                // Если уже сортируем по этому полю, меняем направление
                 this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
             } else {
-                // Если новое поле, сортируем по возрастанию
+                
                 this.sortField = field;
                 this.sortDirection = 'asc';
             }
-            // Сбрасываем страницу на первую при сортировке
             this.currentPage = 0;
         },
         
-        // Метод для отображения иконки сортировки
+        
         getSortIcon(field) {
             if (this.sortField !== field) return 'ri-arrow-up-down-line';
             return this.sortDirection === 'asc' ? 'ri-arrow-up-line' : 'ri-arrow-down-line';
