@@ -193,3 +193,14 @@
         font-size: 1.8rem;
     }
 }
+
+@media(max-width:360px){
+    .finance-stats{
+        display: flex
+;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    flex-direction: column;
+    align-items: center;
+    }
+}

@@ -58,7 +58,7 @@
     display: none;
     margin: 4rem 1rem 0 1rem;
     display: flex;
-    height: 35rem;
+    height: 30rem;
     flex-direction: column;
 }
 
@@ -70,7 +70,8 @@
 .chart-toggle {
     margin: 1rem;
     position: absolute;
-    right: 20px;
+    left: 50px;
+    top: 97px;
     background: var(--primary-light);
     border: none;
     width: 36px;
@@ -139,7 +140,7 @@ body.dark .stat-label {
 }
 
 .chart-legend {
-    min-width: 250px;
+    min-width: 320px;
     background-color: var(--color-background-soft);
     border-radius: var(--border-radius);
     padding: 20px;
@@ -272,27 +273,10 @@ body.dark .btn-export {
     color: white;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 800px) {
     .chart-section {
         flex-direction: column;
         width: 100%;
     }
 
-}
-
-@media(min-width: 701px) and (max-width: 830px) {
-    .chart-legend {
-        width: 40%;
-        height: 23rem;
-    }
-
-    .chart-container {
-        flex-direction: column;
-        width: 20rem;
-        height: 28rem;
-    }
-
-    .chart-img {
-        height: 20rem;
-    }
 }

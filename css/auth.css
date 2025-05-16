@@ -46,7 +46,8 @@
     font-size: 1rem;
     background-color: var(--color-background-mute);
     color: var(--color-text);
-    margin-bottom: 20px;
+    height: 47px;
+    margin: 0px 0px 20px 0;
 }
 
 .btn-submit {

@@ -3,7 +3,9 @@
     <div className="chart-section">
 
         <button className="pagination-btn"  
-        @click="isWindowShow2 = true"><i className="ri-add-fill"></i></button>
+        @click="isWindowShow2 = true" 
+        style="position: absolute;
+        top: 115px;"><i className="ri-add-fill"></i></button>
 
         <div v-if="isWindowShow2" class="win-background">
             <div class="win-main">
