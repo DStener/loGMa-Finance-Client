@@ -122,7 +122,7 @@
                 <h3 class="num">{{index + 1}}</h3>
                 <h3 class="name">{{group.name}}</h3>
                 <div class="lsit-avatars">
-                    <image v-for="avatar in group.users_avatar" class="user-group-avatar" :src="'/api/file/' + avatar"></image>
+                    <img v-for="avatar in group.users" class="user-group-avatar" :src="'/api/user/avatar?id_user=' + avatar"></img>
                 </div>
             </router-link>
 
