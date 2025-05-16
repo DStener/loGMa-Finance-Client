@@ -73,8 +73,11 @@ export default {
         }
     },
     computed: {
+        // themeIcon() {
+        //     return this.isDarkTheme ? 'ri-sun-line' : 'ri-moon-line'
+        // },
         themeIcon() {
-            return this.isDarkTheme ? 'ri-sun-line' : 'ri-moon-line'
+            return (window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'ri-sun-line' : 'ri-moon-line'
         },
         menuIcon() {
             return this.isMenuOpen ? 'ri-close-line' : 'ri-menu-line'
@@ -82,7 +85,11 @@ export default {
     },
 
     // Set saved theme color 
-    mounted: function () {
+    beforeCreate: function () {
+
+        // Disable animation
+        document.documentElement.style.setProperty("--transition", "all 0 ease");
+
         if (localStorage.getItem("isDark") === "false") {
             document.documentElement.classList.remove("dark")
             document.documentElement.classList.add("light")
@@ -92,7 +99,12 @@ export default {
             document.documentElement.classList.add("dark")
             this.isDarkTheme = true;
         }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            document.documentElement.style.setProperty("--transition", "all 0.3s ease");
+        });
     },
+
 
     // Check that user is logined
     mounted: async function () {
