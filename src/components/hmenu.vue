@@ -73,9 +73,6 @@ export default {
         }
     },
     computed: {
-        // themeIcon() {
-        //     return this.isDarkTheme ? 'ri-sun-line' : 'ri-moon-line'
-        // },
         themeIcon() {
             return (window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'ri-sun-line' : 'ri-moon-line'
         },
@@ -100,6 +97,7 @@ export default {
             this.isDarkTheme = true;
         }
 
+        // Enable animation, when DOM is re-draw
         document.addEventListener('DOMContentLoaded', function () {
             document.documentElement.style.setProperty("--transition", "all 0.3s ease");
         });
