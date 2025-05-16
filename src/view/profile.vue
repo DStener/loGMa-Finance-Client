@@ -118,24 +118,31 @@
 
         <div v-if="groups.length" class="div-groups">
 
-            <div v-for="(group, index) in groups" class="wall-groups">
+            <router-link v-for="(group, index) in groups" :to="'/wall/' + group.id" class="wall-groups">
                 <h3 class="num">{{index + 1}}</h3>
                 <h3 class="name">{{group.name}}</h3>
                 <div class="lsit-avatars">
                     <image v-for="avatar in group.users_avatar" class="user-group-avatar" :src="'/api/file/' + avatar"></image>
                 </div>
-            </div>
+            </router-link>
 
         </div>
         <h3 v-if="!groups.length" class="no-groups">Вы не состоите ни в одной из групп</h3>
 
     </div>
+    <mwin><h2>TEST</h2></mwin>
 </div>
 </template>
 
 <script>
+import mwin from '../components/mwin.vue';
+
 export default {
     name: 'UserProfile',
+    components: {
+        mwin
+    },
+
     data() {
         return {
             isEditing: false,
@@ -161,7 +168,7 @@ export default {
             ],
             originalUser: {},
             groups: [
-                //{id: 2, name: "ЗОЖники", users_avatar: [1]},
+                {id: 2, name: "ЗОЖники", users_avatar: [1]},
             ],
         };
     },
@@ -183,6 +190,26 @@ export default {
         this.user.avatar = data.avatar;
 
         console.log(this.avatar);
+    },
+
+    // Get users groups
+    mounted: async function () {
+
+        // const response = await fetch('/api/auth/me');
+        // const status = await response.status;
+        // const data = await response.json();
+
+        // if (status != 200) { return; }
+
+        // this.user.login = data.login;
+        // this.user.name = data.name;
+        // this.user.surname = data.surname;
+        // this.user.patronymic = data.patronymic;
+        // this.user.birthday = data.birthday;
+        // this.user.password = data.password;
+        // this.user.avatar = data.avatar;
+
+        // console.log(this.avatar);
     },
 
     methods: {

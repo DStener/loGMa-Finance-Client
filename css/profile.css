@@ -326,6 +326,8 @@ label {
 .wall-groups {
     display: flex;
     flex-direction: row;
+    text-decoration: none;
+    color: var(--color-text);
 }
 
 .wall-groups .num {
@@ -333,9 +335,6 @@ label {
 }
 
 .wall-groups .name {
-
-    /* width: 100%; */
-
     text-overflow: ellipsis; 
     white-space: nowrap; 
     overflow: hidden;

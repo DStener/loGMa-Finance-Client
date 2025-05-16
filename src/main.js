@@ -24,6 +24,7 @@ const router = createRouter({
     { path: '/auth', component: auth },
     { path: '/me', component: profile },
     { path: '/my', component: wall },
+    { path: '/wall/:pathMatch(.*)*', component: wall },
     { path: '/:pathMatch(.*)*', component: notfound },
     { path: '/analytics', component: analytics },
     { path: '/history', component: history },
