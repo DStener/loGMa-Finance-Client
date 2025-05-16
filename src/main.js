@@ -17,6 +17,7 @@ import historyGroup from './components/history-group.vue';
 import mwinLS from './components/mwinLS.vue';
 import mwinMS from './components/mwinMS.vue';
 
+
 const router = createRouter({
   mode: "history",
   routes: [
@@ -33,6 +34,7 @@ const router = createRouter({
     { path: '/history-group', component: historyGroup },
     { path: '/ls', component: mwinLS },
     { path: '/ms', component: mwinMS },
+
   ],
   history: createWebHistory()
 })

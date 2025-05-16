@@ -45,7 +45,7 @@
 
                             <div class="finance-card">
                                 <div class="card-header">
-                                    <h3 class="card-title">
+                                    <h3 class="stat-title">
                                         <i class="ri-wallet-3-line"></i>
                                         Остаток бюджета
                                     </h3>

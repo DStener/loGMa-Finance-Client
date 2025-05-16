@@ -31,9 +31,6 @@
                         </router-link>
                     </div>
                 </details>
-                
-                <button  v-if="isAuth === 1 && isGroup === 1"   class="invite-btn nav-details">Пригласить</button>
-
             </nav>
 
             <div class="header-right">

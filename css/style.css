@@ -239,6 +239,30 @@ input:not(input[type="submit"]) {
   border: 1px solid #00000057;
 }
 
+select {
+  background-color: var(--color-background-mute);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 1rem;
+  cursor: pointer;
+  width: 100%;
+  transition: border-color 0.3s ease;
+}
+
+select option {
+  background-color: var(--color-background-mute);
+  color: var(--color-text);
+  padding: 8px;
+}
+
+
+select option:checked {
+  background-color: var(--primary-color);
+  color: white;
+}
+
 @media (max-width: 576px) {
   .section-title {
     font-size: 1.3rem;

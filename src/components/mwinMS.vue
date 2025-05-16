@@ -14,16 +14,9 @@
                             </option>
                         </select>
                         <div class="category-limit">
-                            <span v-if="!isEditing">{{ getCurrentMemberStatus() }}</span>
-                            <button v-else @click="ban" class="ban-btn">Бан</button>
+                            <button @click="ban" class="ban-btn">Бан</button>
                         </div>
                     </div>
-                </div>
-                
-                <div class="actions">
-                    <button @click="isEditing = isEditing ? 0 : 1" class="edit-btn">
-                        {{ isEditing ? 'Сохранить' : 'Редактировать' }}
-                    </button>
                 </div>
             </div>
         </div>
@@ -32,7 +25,7 @@
 
 <script>
 export default {
-    name: 'MemberSetting',
+    name: 'MemberManagment',
     data() {
         return {
             isWindowShow: true,
@@ -50,12 +43,8 @@ export default {
         getCurrentMember() {
             return this.members.find(mem => mem.name === this.selectedMember) || {};
         },
-        getCurrentMemberStatus() {
-            const member = this.getCurrentMember();
-            return member ? (member.banned ? 'Забанен' : 'Активен') : null;
-        },
         ban() {
-            
+            // пользователь который this.selectedMember банится
         }
     }
 }
