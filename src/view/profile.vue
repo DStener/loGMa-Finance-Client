@@ -13,13 +13,13 @@
 
             <div class="profile-info">
                 <h2 v-if="!isEditing">{{ user.login }}</h2>
-                <input v-else  v-model="user.login" >
+                <input v-else v-model="user.login" >
                 <p class="email">{{ user.email }}</p>
 
                 <div class="profile-fields">
                     <div class="field">
                         <label>Имя</label>
-                        <input v-if="isEditing"  v-model="user.name" type="text" >
+                        <input v-if="isEditing" v-model="user.name" type="text" >
                         <div v-else class="field-value">
                             {{user.name}}
                         </div>
@@ -27,7 +27,7 @@
                     
                     <div class="field">
                         <label>Фамилия</label>
-                        <input v-if="isEditing"  v-model="user.surname" type="text" >
+                        <input v-if="isEditing" v-model="user.surname" type="text" >
                         <div v-else class="field-value">
                             {{user.surname}}
                         </div>
@@ -35,7 +35,7 @@
                     
                     <div class="field">
                         <label>Отчество</label>
-                        <input v-if="isEditing"  v-model="user.patronymic" type="text" >
+                        <input v-if="isEditing" v-model="user.patronymic" type="text" >
                         <div v-else class="field-value">
                             {{user.patronymic}}
                         </div>
@@ -43,7 +43,7 @@
                     
                     <div class="field">
                         <label>Дата рождения</label>
-                        <input v-if="isEditing"  v-model="user.birthday" type="date" >
+                        <input v-if="isEditing" v-model="user.birthday" type="date" >
                         <div v-else class="field-value">
                             {{user.birthday}}
                         </div>
@@ -62,20 +62,20 @@
             </div>
         </div>
 
-        <div >
-            <div v-if="!isEditing">
+        <div class="profile-actions">
+            <template v-if="!isEditing">
                 <button class="edit-btn" @click="startEditing">
                     <i class="ri-edit-line"></i> Изменить профиль
                 </button>
-            </div>
-            <div v-else>
+            </template>
+            <template v-else>
                 <button class="save-btn" @click="saveChanges">
                     <i class="ri-check-line"></i> Сохранить
                 </button>
                 <button class="cancel-btn" @click="cancelChanges">
                     <i class="ri-close-line"></i> Отменить
                 </button>
-            </div>
+            </template>
         </div>
 
         <button class="btn-logout" @click="logout">
@@ -137,8 +137,8 @@
             <i class="ri-group-line accent-icon center"></i>
             <h1 class="center">Создание группы</h1>
 
-            <form calss="create-form">
-                <input class="form-input" type="text" placeholder="Введите название группы"/>
+            <form calss="create-form" id="form-create-group" @submit="createGroup">
+                <input class="form-input" type="text" name="name" placeholder="Введите название группы"/>
                 <input type="submit" class="btn green-fill">
             </form>
         </div>
@@ -178,48 +178,68 @@ export default {
             ],
             originalUser: {},
             groups: [
-                {id: 2, name: "ЗОЖники", users_avatar: [1]},
+                // {id: 2, name: "ЗОЖники", users: [1]},
             ],
         };
     },
     // Check that user is logined
-    mounted: async function () {
+    // mounted: async function () {
 
-        const response = await fetch('/api/auth/me');
-        const status = await response.status;
-        const data = await response.json();
+    //     const response = await fetch('/api/auth/me');
+    //     const status = await response.status;
+    //     const data = await response.json();
 
-        if (status != 200) { return; }
+    //     if (status != 200) { return; }
 
-        this.user.login = data.login;
-        this.user.name = data.name;
-        this.user.surname = data.surname;
-        this.user.patronymic = data.patronymic;
-        this.user.birthday = data.birthday;
-        this.user.password = data.password;
-        this.user.avatar = data.avatar;
+    //     this.user.login = data.login;
+    //     this.user.name = data.name;
+    //     this.user.surname = data.surname;
+    //     this.user.patronymic = data.patronymic;
+    //     this.user.birthday = data.birthday;
+    //     this.user.password = data.password;
+    //     this.user.avatar = data.avatar;
 
-        console.log(this.avatar);
-    },
+    //     console.log(this.avatar);
+    // },
 
-    // Get users groups
-    mounted: async function () {
+    mounted() {
+        // Get user info
+        this.$nextTick(async function () {
+            const response = await fetch('/api/auth/me');
+            const status = await response.status;
+            const data = await response.json();
 
-        // const response = await fetch('/api/auth/me');
-        // const status = await response.status;
-        // const data = await response.json();
+            if (status != 200) { return; }
 
-        // if (status != 200) { return; }
+            this.user.login = data.login;
+            this.user.name = data.name;
+            this.user.surname = data.surname;
+            this.user.patronymic = data.patronymic;
+            this.user.birthday = data.birthday;
+            this.user.password = data.password;
+            this.user.avatar = data.avatar;
 
-        // this.user.login = data.login;
-        // this.user.name = data.name;
-        // this.user.surname = data.surname;
-        // this.user.patronymic = data.patronymic;
-        // this.user.birthday = data.birthday;
-        // this.user.password = data.password;
-        // this.user.avatar = data.avatar;
+            console.log(this.avatar);
+        });
+        // Get user groups
+        this.$nextTick(async function () {
 
-        // console.log(this.avatar);
+            const response = await fetch('/api/wall/walls');
+            const status = await response.status;
+            const data = await response.json();
+
+            if (status != 200) { return; }
+
+            for(let i = 0; i < data.length; ++i) {
+                // console.log(i);
+                // console.log({ id: data[i].id, name: data[i].name, users: data[i].users});
+                this.groups.push({ id: data[i].id, name: data[i].name, users: data[i].users});
+                // data[i].id
+                // this.groups.append({ id: data[i].id, name: data[i].name, users: data[i].users});
+            }
+
+            console.log(data);
+        });
     },
 
     methods: {
@@ -305,6 +325,20 @@ export default {
             if(status == 200) {
                 document.location.pathname = '/';
             };
+        },
+
+        async createGroup(e) {
+            e.preventDefault();
+
+            const form = new FormData(document.querySelector('#form-create-group'));
+
+            const response = await fetch('/api/wall/create', {method: 'POST', body: form});
+            const status = await response.status;
+            const data = await response.json(); 
+
+            if(status == 200) {
+                document.location.pathname = `/wall/${data.id}`;
+            }
         }
     }
 };
