@@ -13,13 +13,13 @@
 
             <div class="profile-info">
                 <h2 v-if="!isEditing">{{ user.login }}</h2>
-                <input v-else v-model="user.login" >
+                <input v-else  v-model="user.login" >
                 <p class="email">{{ user.email }}</p>
 
                 <div class="profile-fields">
                     <div class="field">
                         <label>Имя</label>
-                        <input v-if="isEditing" v-model="user.name" type="text" >
+                        <input v-if="isEditing"  v-model="user.name" type="text" >
                         <div v-else class="field-value">
                             {{user.name}}
                         </div>
@@ -27,7 +27,7 @@
                     
                     <div class="field">
                         <label>Фамилия</label>
-                        <input v-if="isEditing" v-model="user.surname" type="text" >
+                        <input v-if="isEditing"  v-model="user.surname" type="text" >
                         <div v-else class="field-value">
                             {{user.surname}}
                         </div>
@@ -35,7 +35,7 @@
                     
                     <div class="field">
                         <label>Отчество</label>
-                        <input v-if="isEditing" v-model="user.patronymic" type="text" >
+                        <input v-if="isEditing"  v-model="user.patronymic" type="text" >
                         <div v-else class="field-value">
                             {{user.patronymic}}
                         </div>
@@ -43,7 +43,7 @@
                     
                     <div class="field">
                         <label>Дата рождения</label>
-                        <input v-if="isEditing" v-model="user.birthday" type="date" >
+                        <input v-if="isEditing"  v-model="user.birthday" type="date" >
                         <div v-else class="field-value">
                             {{user.birthday}}
                         </div>
@@ -62,20 +62,20 @@
             </div>
         </div>
 
-        <div class="profile-actions">
-            <template v-if="!isEditing">
+        <div >
+            <div v-if="!isEditing">
                 <button class="edit-btn" @click="startEditing">
                     <i class="ri-edit-line"></i> Изменить профиль
                 </button>
-            </template>
-            <template v-else>
+            </div>
+            <div v-else>
                 <button class="save-btn" @click="saveChanges">
                     <i class="ri-check-line"></i> Сохранить
                 </button>
                 <button class="cancel-btn" @click="cancelChanges">
                     <i class="ri-close-line"></i> Отменить
                 </button>
-            </template>
+            </div>
         </div>
 
         <button class="btn-logout" @click="logout">

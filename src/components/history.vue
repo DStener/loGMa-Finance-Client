@@ -29,10 +29,10 @@
         <div class="win-main">
             <button class="win-close-btn" @click="isAddWindowShow = false"><i class="ri-close-line"></i></button>
             <h1>Добавить трату</h1>
-            <input type="text" class="color-input" v-model="data" placeholder="чч мм гггг">
-            <input type="text" class="color-input" v-model="category" placeholder="категория">
-            <input type="text" class="color-input" v-model="sum" placeholder="сумма">
-            <input type="text" class="inp-description" v-model="Description" placeholder="описание">
+            <input type="text"  v-model="data" placeholder="чч мм гггг">
+            <input type="text"  v-model="category" placeholder="категория">
+            <input type="text"  v-model="sum" placeholder="сумма">
+            <input type="text"  v-model="Description" placeholder="описание">
             <button @click="sendData(), isAddWindowShow = false" class="btn-add">добавить</button>
         </div>
     </div>
@@ -42,9 +42,9 @@
         <div class="win-main">
             <button class="win-close-btn" @click="isEditWindowShow = false"><i class="ri-close-line"></i></button>
             <h1>Редактировать трату</h1>
-            <input type="text" class="color-input" v-model="editingItem.editedCategory" placeholder="категория">
-            <input type="text" class="color-input" v-model="editingItem.editedSum" placeholder="сумма">
-            <input type="text" class="inp-description" v-model="editingItem.editedDescription" placeholder="описание">
+            <input type="text"  v-model="editingItem.editedCategory" placeholder="категория">
+            <input type="text"  v-model="editingItem.editedSum" placeholder="сумма">
+            <input type="text"  v-model="editingItem.editedDescription" placeholder="описание">
             <button @click="saveChanges()" class="btn-add">сохранить</button>
         </div>
     </div>

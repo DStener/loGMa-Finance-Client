@@ -25,9 +25,9 @@
             <div class="win-main">
                 <button class="win-close-btn" @click="this.isWindowShow2 = false"><i class="ri-close-line"></i></button>
                 <h1>Добавить категорию</h1>
-                <input type="text"  v-model="categoryName" placeholder="Название">
-                <input type="number" class="color-input" v-model="categoryLimit" placeholder="Задайте лимит">
-                <button  @click="addCategory()"  className="btn-add">добавить</button>
+                <input type="text" style="height: 47px;" v-model="categoryName" placeholder="Название">
+                <input type="number" class="color-input" style="height: 47px;" v-model="categoryLimit" placeholder="Задайте лимит">
+                <button  @click="addCategory()"  className="btn-add">Добавить</button>
             </div>
         </div>
 
