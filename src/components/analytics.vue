@@ -41,37 +41,40 @@
             </div>
         </div>
         
-        <div className="chart-container" id="chart">            
-            <canvas className="chart-img"></canvas>
-        </div>
-    
-        <div className="chart-legend">
-            <div className="legend-header">
-                <h3>Распределение расходов</h3>
-                <button className="mobile-chart-toggle" @click="toggleMobileChart">
-                <i className="fas fa-chart-pie"></i>
+        <div class="block-chart">
+            <div className="chart-container" id="chart">            
+                <canvas ref="chartCanvas" className="chart-img"></canvas>
+            </div>
+        
+            <div className="chart-legend">
+                <div className="legend-header">
+                    <h3>Распределение расходов</h3>
+                    <button className="mobile-chart-toggle" @click="toggleMobileChart">
+                    <i className="fas fa-chart-pie"></i>
+                    </button>
+                </div>
+                <ul className="category-list">
+                    <li className="category-item" v-for="category in categories" :key="category.name">
+                        <div className="category-info">
+                            <span className="category-color" :style="{ background: category.color }"></span>
+                            <i className="fas category-icon" :class="category.icon"></i>
+                            <span className="category-name">{{ category.name }}</span>
+                            <div className="limit-amount">
+                                <span className="category-amount">{{ category.amount }} /</span>
+                                <span className="category-limit">{{ category.limit }} ₽</span>
+                            </div>
+                        </div>
+                        <div className="progress-container">
+                            <div className="progress-bar-2" :style="{ width: category.percentage + '%', background: category.color }"></div>
+                        </div>
+                    </li>
+                </ul>
+                <button className="btn-export">
+                    <i className="ri-upload-2-fill"></i> Экспорт данных
                 </button>
             </div>
-            <ul className="category-list">
-                <li className="category-item" v-for="category in categories" :key="category.name">
-                    <div className="category-info">
-                        <span className="category-color" :style="{ background: category.color }"></span>
-                        <i className="fas category-icon" :class="category.icon"></i>
-                        <span className="category-name">{{ category.name }}</span>
-                        <div className="limit-amount">
-                            <span className="category-amount">{{ category.amount }} /</span>
-                            <span className="category-limit">{{ category.limit }} ₽</span>
-                        </div>
-                    </div>
-                    <div className="progress-container">
-                        <div className="progress-bar-2" :style="{ width: category.percentage + '%', background: category.color }"></div>
-                    </div>
-                </li>
-            </ul>
-            <button className="btn-export">
-                <i className="ri-upload-2-fill"></i> Экспорт данных
-            </button>
         </div>
+        
     </div>
 </div>
 </template>
@@ -105,15 +108,11 @@ export default {
             chart: null
         };
     },
-    computed: {
-    showButton() {
-        return this.$route.path === '/my'; 
-        },
-        showButton2() {
-        return this.$route.path === '/group'; 
-        }
-        
+
+    mounted() {
+        this.loadImageToCanvas();
     },
+
     methods: {
         toggleChartExpand() {
             var block = document.getElementById('chart');
@@ -134,6 +133,27 @@ export default {
                 return;
             }
             this.isWindowShow2 = false; //это после отправки апи добавить
+        },
+
+        loadImageToCanvas() {
+            const canvas = this.$refs.chartCanvas;
+            const ctx = canvas.getContext('2d');
+            
+            // Устанавливаем размеры canvas (если нужно)
+            canvas.width = 800; // или нужная вам ширина
+            canvas.height = 400; // или нужная вам высота
+
+            const img = new Image();
+            img.src = '/src/assets/chart-prim.png';
+            
+            img.onload = () => {
+                // Рисуем изображение с масштабированием под размер canvas
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            };
+            
+            img.onerror = () => {
+                console.error('Не удалось загрузить изображение');
+            };
         }
     }
 };
