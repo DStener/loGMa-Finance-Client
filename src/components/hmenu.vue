@@ -100,7 +100,6 @@ export default {
         });
     },
 
-
     // Check that user is logined
     mounted: async function () {
 
@@ -117,10 +116,10 @@ export default {
 
 
     methods: {
-        toggleMenu() {
+
+        toggleMenu() { 
             this.isMenuOpen = !this.isMenuOpen
         },
-
         toggleTheme() {
 
             if (localStorage.getItem("isDark") != null) {
@@ -147,11 +146,7 @@ export default {
                 localStorage.setItem('isDark', "false")
                 this.isDarkTheme = false;
             }
-
         },
-        handleAddExpense() {
-            this.$emit('add-expense')
-        }
     }
 }
 </script>
