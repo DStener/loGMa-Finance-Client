@@ -138,8 +138,8 @@
             <h1 class="center">Создание группы</h1>
 
             <form calss="create-form">
-                <input calss="form-input" type="text" placeholder="Введите название группы"/>
-                <input type="submit">
+                <input class="form-input" type="text" placeholder="Введите название группы"/>
+                <input type="submit" class="btn green-fill">
             </form>
         </div>
     </div>
