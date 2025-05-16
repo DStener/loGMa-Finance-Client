@@ -32,6 +32,10 @@
   font-weight: normal;
 }
 
+.notransition * { 
+  transition: none !important; 
+} 
+
 /* color palette from <https://github.com/vuejs/theme> */
 :root {
   --vt-c-white: #ffffff;

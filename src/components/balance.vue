@@ -107,7 +107,7 @@ export default {
             currencies: [
                 {
                     label: 'Рубли',
-                    symbol: '₽',
+                    symbol: 'RUB',
                     totalExpenses: '12,450',
                     totalIncome: '45,000',
                     budgetLeft: '27,550',
@@ -116,7 +116,7 @@ export default {
                 },
                 {
                     label: 'Доллары США',
-                    symbol: '$',
+                    symbol: 'DOL',
                     totalExpenses: '1,050',
                     totalIncome: '3,000',
                     budgetLeft: '1,950',
@@ -125,7 +125,7 @@ export default {
                 },
                 {
                     label: 'Юани',
-                    symbol: '¥',
+                    symbol: 'YEN',
                     totalExpenses: '800',
                     totalIncome: '2,300',
                     budgetLeft: '1,500',
