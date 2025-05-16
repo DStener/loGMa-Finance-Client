@@ -362,3 +362,17 @@ label {
     padding-bottom: 1rem;
     /* padding: 0.5rem 0; */
 }
+
+.accent-icon {
+    font-size: 10rem;
+    color: var(--secondary);
+}
+
+.create-form {
+    display: flex;
+    flex-direction: column;
+}
+
+/* .create-form input {
+    width: 100%;
+} */

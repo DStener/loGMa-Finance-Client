@@ -110,7 +110,7 @@
 
         <h2>Группы</h2>
 
-        <button class="btn anchor top right green">
+        <button @click="this.isAddWallWindow = true" class="btn anchor top right green">
             <i class="ri-add-line"></i>
             Создать
         </button>
@@ -130,22 +130,32 @@
         <h3 v-if="!groups.length" class="no-groups">Вы не состоите ни в одной из групп</h3>
 
     </div>
-    <mwin><h2>TEST</h2></mwin>
+    <!-- CREATE GROUP WALL WINDOW -->
+    <div v-if="isAddWallWindow" class="win-background">
+        <div class="win-main">
+            <button class="win-close-btn" @click="this.isAddWallWindow = false"><i class="ri-close-line"></i></button>
+            <i class="ri-group-line accent-icon center"></i>
+            <h1 class="center">Создание группы</h1>
+
+            <form calss="create-form">
+                <input calss="form-input" type="text" placeholder="Введите название группы"/>
+                <input type="submit">
+            </form>
+        </div>
+    </div>
 </div>
 </template>
 
 <script>
-import mwin from '../components/mwin.vue';
 
 export default {
     name: 'UserProfile',
-    components: {
-        mwin
-    },
 
     data() {
         return {
             isEditing: false,
+            isAddWallWindow: false,
+
             showPasswordChangeModal: false,
             currentPassword: '',
             newPassword: '',

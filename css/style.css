@@ -166,13 +166,13 @@ body {
   border: none;
 }
 
-.absolute {
-  position: relative;
+.center {
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.anchor {
-  position: absolute;
-}
+.absolute {position: relative;}
+.anchor { position: absolute; }
 
 .anchor.top { top: var(--indentation-margin); }
 .anchor.bottom { bottom: var(--indentation-margin); }
@@ -203,6 +203,18 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
+}
+
+input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #00000057;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: var(--color-background-mute);
+  color: var(--color-text);
+  height: 47px;
+  margin: 0px 0px 20px 0;
 }
 
 @media (max-width: 576px) {
