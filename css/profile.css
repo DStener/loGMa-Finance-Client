@@ -3,8 +3,8 @@
     border-radius: var(--border-radius);
     padding: 1.5rem;
     box-shadow: var(--box-shadow);
-    max-width: 500px;
-    margin: 1rem;
+    width: 100%;
+
     position: relative;
     color: var(--color-text);
 }
@@ -191,7 +191,7 @@ label {
 }
 
 .btn-logout {
-    width: 100%;
+    /* max-width: 50rem; */
     padding: 0.6rem;
     border-radius: 8px;
     font-weight: 500;

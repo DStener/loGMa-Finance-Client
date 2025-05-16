@@ -55,11 +55,7 @@ export default {
             return member ? (member.banned ? 'Забанен' : 'Активен') : null;
         },
         ban() {
-            // Пустой скрипт бана, как requested
-            const member = this.getCurrentMember();
-            if (member) {
-                member.banned = true;
-            }
+            
         }
     }
 }
