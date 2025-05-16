@@ -108,7 +108,15 @@ export default {
             chart: null
         };
     },
-
+    computed: {
+    showButton() {
+        return this.$route.path === '/my'; 
+        },
+        showButton2() {
+        return this.$route.path === '/group'; 
+        }
+        
+    },
     mounted() {
         this.loadImageToCanvas();
     },
@@ -139,15 +147,13 @@ export default {
             const canvas = this.$refs.chartCanvas;
             const ctx = canvas.getContext('2d');
             
-            // Устанавливаем размеры canvas (если нужно)
-            canvas.width = 800; // или нужная вам ширина
-            canvas.height = 400; // или нужная вам высота
+            canvas.width = 800; 
+            canvas.height = 400; 
 
             const img = new Image();
             img.src = '/src/assets/chart-prim.png';
             
             img.onload = () => {
-                // Рисуем изображение с масштабированием под размер canvas
                 ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
             };
             
