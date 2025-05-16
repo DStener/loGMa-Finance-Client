@@ -1,11 +1,25 @@
 <template>
 <div className="analytics-block">
     <div className="chart-section">
-
-        <button className="pagination-btn"  
-        @click="isWindowShow2 = true" 
-        style="position: absolute;
-        top: 115px;"><i className="ri-add-fill"></i></button>
+        <div class="header-table-2">
+            <h2 class="section-title">
+                <i class="ri-pie-chart-line"></i> Аналитика
+            </h2>
+            <div style="
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                margin-left: 20px;
+            /* before 800ps width is work */
+            ">   
+                <button class="pagination-btn" @click="isWindowShow2 = true">
+                    <i class="ri-add-fill"></i>
+                </button>
+                <button class="pagination-btn" @click="toggleChartExpand">
+                    <i class="fas" :class="isChartExpanded ? 'ri-arrow-down-s-line' : 'ri-arrow-up-s-line'"></i>
+                </button>
+            </div>
+        </div>
 
         <div v-if="isWindowShow2" class="win-background">
             <div class="win-main">
@@ -17,9 +31,7 @@
             </div>
         </div>
 
-        <button className="chart-toggle" @click="toggleChartExpand">
-                <i className="fas" :class="isChartExpanded ? 'ri-arrow-down-s-line' : 'ri-arrow-up-s-line'"></i>
-        </button>
+        
         <div className="chart-container" id="chart">            
 
             <canvas className="chart-img"></canvas>

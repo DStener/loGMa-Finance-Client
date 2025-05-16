@@ -157,6 +157,14 @@ body.dark .stat-label {
     margin-bottom: 15px;
 }
 
+.header-table-2 {
+    display: flex;
+    justify-content: space-between;
+    height: 45px;
+}
+
+
+
 .mobile-chart-toggle {
     display: none;
     background: var(--primary-light);
