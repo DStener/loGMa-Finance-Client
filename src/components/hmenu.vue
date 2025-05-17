@@ -9,7 +9,7 @@
 
                 <div class="logo" :class="{ 'white-icon': isMenuOpen }">
                     <img src="/src/assets/favicon.png" class="logo" />
-                    <span>loGMa</span>
+                    <span>LoGMa</span>
                 </div>
             </div>
 
@@ -20,29 +20,6 @@
                 <router-link v-if="isAuth === 1" to="/my" class="nav-link">
                     <i class="ri-history-line"></i> Мой бюджет
                 </router-link>
-
-                <details v-if="isAuth === 1" class="nav-details">
-                    <summary class="nav-summary">
-                        <i class="ri-group-line"></i> Группы
-                    </summary>
-                    <div class="nav-dropdown">
-                        <router-link v-for="group in groups" to="/groups" class="nav-link dropdown-link">
-                            {{ group.name }}
-                        </router-link>
-                    </div>
-                </details>
-                <details v-if="isAuth === 1 && isAdmin === 1 && isGroup === 1" class="nav-details">
-                    <summary class="nav-summary">
-                        <i class="ri-user-settings-line"></i>Управление группой
-                    </summary>
-                    <div class="nav-dropdown">
-                        <span class="nav-link"><i class="ri-user-shared-2-line"></i> Управление участниками</span>
-                        <span class="nav-link"><i class="ri-file-edit-line"></i> Редактировать бюджет</span>
-                    </div>
-
-                </details>
-                <button  v-if="isAuth === 1 && isGroup === 1"   class="invite-btn nav-details">Пригласить</button>
-
             </nav>
 
             <div class="header-right">
@@ -51,7 +28,7 @@
                     <i :class="themeIcon"></i>
                 </button>
 
-                <router-link v-if="isAuth === 1" to="/profile" class="user-profile"
+                <router-link v-if="isAuth === 1" to="/me" class="user-profile"
                     :class="{ 'white-icon': isMenuOpen }">
                     <img v-if="userAvatar" :src="userAvatar" alt="User avatar" class="avatar" />
                     <i v-else class="ri-user-line"></i>
@@ -60,17 +37,12 @@
                     <i class="ri-login-box-line"></i>
                 </router-link>
             </div>
-
-
-
-
         </div>
     </header>
 </template>
 
 <script>
 export default {
-    name: 'AppHeader',
     data() {
         return {
             isMenuOpen: false,
@@ -88,7 +60,7 @@ export default {
     },
     computed: {
         themeIcon() {
-            return this.isDarkTheme ? 'ri-sun-line' : 'ri-moon-line'
+            return (window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'ri-sun-line' : 'ri-moon-line'
         },
         menuIcon() {
             return this.isMenuOpen ? 'ri-close-line' : 'ri-menu-line'
@@ -96,7 +68,11 @@ export default {
     },
 
     // Set saved theme color 
-    mounted: function () {
+    beforeCreate: function () {
+
+        // Disable animation
+        document.documentElement.style.setProperty("--transition", "all 0 ease");
+
         if (localStorage.getItem("isDark") === "false") {
             document.documentElement.classList.remove("dark")
             document.documentElement.classList.add("light")
@@ -106,6 +82,11 @@ export default {
             document.documentElement.classList.add("dark")
             this.isDarkTheme = true;
         }
+
+        // Enable animation, when DOM is re-draw
+        document.addEventListener('DOMContentLoaded', function () {
+            document.documentElement.style.setProperty("--transition", "all 0.3s ease");
+        });
     },
 
     // Check that user is logined
@@ -124,10 +105,10 @@ export default {
 
 
     methods: {
-        toggleMenu() {
+
+        toggleMenu() { 
             this.isMenuOpen = !this.isMenuOpen
         },
-
         toggleTheme() {
 
             if (localStorage.getItem("isDark") != null) {
@@ -154,11 +135,7 @@ export default {
                 localStorage.setItem('isDark', "false")
                 this.isDarkTheme = false;
             }
-
         },
-        handleAddExpense() {
-            this.$emit('add-expense')
-        }
     }
 }
 </script>

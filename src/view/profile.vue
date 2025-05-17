@@ -1,4 +1,5 @@
 <template>
+<div class="div-adaptive-grid">
     <div class="profile-container">
         <div class="profile-header">
             <div class="avatar-container">
@@ -12,13 +13,13 @@
 
             <div class="profile-info">
                 <h2 v-if="!isEditing">{{ user.login }}</h2>
-                <input v-else v-model="user.login" class="edit-input login-input">
+                <input v-else v-model="user.login" >
                 <p class="email">{{ user.email }}</p>
 
                 <div class="profile-fields">
                     <div class="field">
                         <label>Имя</label>
-                        <input v-if="isEditing" v-model="user.name" type="text" class="edit-input">
+                        <input v-if="isEditing" v-model="user.name" type="text" >
                         <div v-else class="field-value">
                             {{user.name}}
                         </div>
@@ -26,7 +27,7 @@
                     
                     <div class="field">
                         <label>Фамилия</label>
-                        <input v-if="isEditing" v-model="user.surname" type="text" class="edit-input">
+                        <input v-if="isEditing" v-model="user.surname" type="text" >
                         <div v-else class="field-value">
                             {{user.surname}}
                         </div>
@@ -34,7 +35,7 @@
                     
                     <div class="field">
                         <label>Отчество</label>
-                        <input v-if="isEditing" v-model="user.patronymic" type="text" class="edit-input">
+                        <input v-if="isEditing" v-model="user.patronymic" type="text" >
                         <div v-else class="field-value">
                             {{user.patronymic}}
                         </div>
@@ -42,7 +43,7 @@
                     
                     <div class="field">
                         <label>Дата рождения</label>
-                        <input v-if="isEditing" v-model="user.birthday" type="date" class="edit-input">
+                        <input v-if="isEditing" v-model="user.birthday" type="date" >
                         <div v-else class="field-value">
                             {{user.birthday}}
                         </div>
@@ -104,26 +105,70 @@
             </div>
         </div>
     </div>
+
+    <div class="block color-back absolute">
+
+        <h2>Группы</h2>
+
+        <button @click="this.isAddWallWindow = true" class="btn anchor top right green">
+            <i class="ri-add-line"></i>
+            Создать
+        </button>
+
+
+        <div v-if="groups.length" class="div-groups">
+
+            <router-link v-for="(group, index) in groups" :to="'/wall/' + group.id" class="wall-groups">
+                <h3 class="num">{{index + 1}}</h3>
+                <h3 class="name">{{group.name}}</h3>
+                <div class="lsit-avatars">
+                    <img v-for="avatar in group.users" class="user-group-avatar" :src="'/api/user/avatar?id_user=' + avatar"></img>
+                </div>
+            </router-link>
+
+        </div>
+        <h3 v-if="!groups.length" class="no-groups">Вы не состоите ни в одной из групп</h3>
+
+    </div>
+    <!-- CREATE GROUP WALL WINDOW -->
+    <div v-if="isAddWallWindow" class="win-background">
+        <div class="win-main">
+            <button class="win-close-btn" @click="this.isAddWallWindow = false"><i class="ri-close-line"></i></button>
+            <i class="ri-group-line accent-icon center"></i>
+            <h1 class="center">Создание группы</h1>
+
+            <form calss="create-form" id="form-create-group" @submit="createGroup">
+                <input class="form-input" type="text" name="name" placeholder="Введите название группы"/>
+                <input class="form-input" type="number" name="lim" placeholder="Введите лимит бюджета группы"/>
+                <input type="submit" class="btn green-fill">
+            </form>
+        </div>
+    </div>
+</div>
 </template>
 
 <script>
+
 export default {
     name: 'UserProfile',
+
     data() {
         return {
             isEditing: false,
+            isAddWallWindow: false,
+
             showPasswordChangeModal: false,
             currentPassword: '',
             newPassword: '',
             isWindowShow: false,
             user: {
-                login: 'darkedoviz',
-                email: 'user@example.com',
-                name: 'Иван',
-                surname: 'Иванов',
-                patronymic: 'Иванович',
-                birthday: '1990-01-01',
-                password: 'securepassword123',
+                login: null,
+                email: null,
+                name: null,
+                surname: null,
+                patronymic: null,
+                birthday: null,
+                password: null,
                 avatar: null,
             },
             editableFields: [
@@ -132,27 +177,52 @@ export default {
                 { key: 'patronymic', label: 'Отчество', type: 'text', editable: true },
                 { key: 'birthday', label: 'Дата рождения', type: 'date', editable: true },
             ],
-            originalUser: {}
+            originalUser: {},
+            groups: [
+                // {id: 2, name: "ЗОЖники", users: [1]},
+            ],
         };
     },
-    // Check that user is logined
-    mounted: async function () {
 
-        const response = await fetch('/api/auth/me');
-        const status = await response.status;
-        const data = await response.json();
 
-        if (status != 200) { return; }
+    mounted() {
+        // Get user info
+        this.$nextTick(async function () {
+            const response = await fetch('/api/auth/me');
+            const status = await response.status;
+            const data = await response.json();
 
-        this.user.login = data.login;
-        this.user.name = data.name;
-        this.user.surname = data.surname;
-        this.user.patronymic = data.patronymic;
-        this.user.birthday = data.birthday;
-        this.user.password = data.password;
-        this.user.avatar = data.avatar;
+            if (status != 200) { return; }
 
-        console.log(this.avatar);
+            this.user.login = data.login;
+            this.user.name = data.name;
+            this.user.surname = data.surname;
+            this.user.patronymic = data.patronymic;
+            this.user.birthday = data.birthday;
+            this.user.password = data.password;
+            this.user.avatar = data.avatar;
+
+            console.log(this.avatar);
+        });
+        // Get user groups
+        this.$nextTick(async function () {
+
+            const response = await fetch('/api/wall/walls');
+            const status = await response.status;
+            const data = await response.json();
+
+            if (status != 200) { return; }
+
+            for(let i = 0; i < data.length; ++i) {
+                // console.log(i);
+                // console.log({ id: data[i].id, name: data[i].name, users: data[i].users});
+                this.groups.push({ id: data[i].id, name: data[i].name, users: data[i].users});
+                // data[i].id
+                // this.groups.append({ id: data[i].id, name: data[i].name, users: data[i].users});
+            }
+
+            console.log(data);
+        });
     },
 
     methods: {
@@ -174,7 +244,7 @@ export default {
             form.append("password", this.user.password);
             form.append("avatar", this.user.avatar);
 
-            const response = await fetch('/api/auth/me', {method: 'PUT', body: form});
+            const response = await fetch('/api/user/update', {method: 'PUT', body: form});
             const status = await response.status;
             const data = await response.json();
             
@@ -238,6 +308,20 @@ export default {
             if(status == 200) {
                 document.location.pathname = '/';
             };
+        },
+
+        async createGroup(e) {
+            e.preventDefault();
+
+            const form = new FormData(document.querySelector('#form-create-group'));
+
+            const response = await fetch('/api/wall/create', {method: 'POST', body: form});
+            const status = await response.status;
+            const data = await response.json(); 
+
+            if(status == 200) {
+                document.location.pathname = `/wall/${data.id}`;
+            }
         }
     }
 };

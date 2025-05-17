@@ -3,6 +3,7 @@
         <div class="win-main">
             <button class="win-close-btn" @click="this.isWindowShow = false"><i class="ri-close-line"></i></button>
             <h1>Landing page</h1>
+            {{}}
         </div>
     </div>
 </template>

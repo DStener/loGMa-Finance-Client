@@ -29,23 +29,11 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                <div class="summary-period">
-                                    <button
-                                        v-for="period in periods"
-                                        :key="period.value"
-                                        class="period-btn"
-                                        :class="{ activePeriod: activePeriod === period.value }"
-                                        @click="setPeriod(period.value)"
-                                    >
-                                        {{ period.label }}
-                                    </button>
-                                </div>
                             </div>
 
                             <div class="finance-card">
                                 <div class="card-header">
-                                    <h3 class="card-title">
+                                    <h3 class="stat-title">
                                         <i class="ri-wallet-3-line"></i>
                                         Остаток бюджета
                                     </h3>
@@ -98,6 +86,9 @@ import '@glidejs/glide/dist/css/glide.core.min.css'
 export default {
     data() {
         return {
+
+            idWall: null,
+
             activePeriod: 'month',
             periods: [
                 { value: 'week', label: 'Неделя' },
@@ -107,7 +98,7 @@ export default {
             currencies: [
                 {
                     label: 'Рубли',
-                    symbol: '₽',
+                    symbol: 'RUB',
                     totalExpenses: '12,450',
                     totalIncome: '45,000',
                     budgetLeft: '27,550',
@@ -116,7 +107,7 @@ export default {
                 },
                 {
                     label: 'Доллары США',
-                    symbol: '$',
+                    symbol: 'DOL',
                     totalExpenses: '1,050',
                     totalIncome: '3,000',
                     budgetLeft: '1,950',
@@ -125,7 +116,7 @@ export default {
                 },
                 {
                     label: 'Юани',
-                    symbol: '¥',
+                    symbol: 'YEN',
                     totalExpenses: '800',
                     totalIncome: '2,300',
                     budgetLeft: '1,500',
@@ -136,15 +127,45 @@ export default {
             glide: null
         }
     },
-    mounted() {
-        this.initGlide()
+    // mounted() {
+    //     this.initGlide()
+    // },
+
+    mounted: async function() {
+
+        const target = (window.location.pathname == "/my")? "/api/wall/my" : "/api/wall/walls";
+
+        const response = await fetch(target);
+        const status = await response.status;
+        const data = await response.json();
+
+        if(status != 200) { return; }
+
+        if(window.location.pathname == "/my") {
+
+            console.log(data);
+
+            this.idWall = data[0].id;
+        }
+
+        this.configCurrency();
     },
+
     beforeDestroy() {
         if (this.glide) {
             this.glide.destroy()
         }
     },
     methods: {
+
+        async configCurrency() {
+            const response = await fetch(`/api/wall/sum?id_wall=${this.idWall}`);
+            const status = await response.status;
+            const data = await response.json();
+
+            console.log(data);
+        },
+
         setPeriod(period) {
             this.activePeriod = period
         },

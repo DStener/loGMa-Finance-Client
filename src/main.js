@@ -17,6 +17,7 @@ import historyGroup from './components/history-group.vue';
 import mwinLS from './components/mwinLS.vue';
 import mwinMS from './components/mwinMS.vue';
 
+
 const router = createRouter({
   mode: "history",
   routes: [
@@ -24,14 +25,16 @@ const router = createRouter({
     { path: '/auth', component: auth },
     { path: '/me', component: profile },
     { path: '/my', component: wall },
+    { path: '/wall/:pathMatch(.*)*', component: wall },
     { path: '/:pathMatch(.*)*', component: notfound },
     { path: '/analytics', component: analytics },
     { path: '/history', component: history },
-    { path: '/groups', component: groupwall },
+    { path: '/group', component: groupwall },
     { path: '/stats', component: analytics },
     { path: '/history-group', component: historyGroup },
     { path: '/ls', component: mwinLS },
     { path: '/ms', component: mwinMS },
+
   ],
   history: createWebHistory()
 })

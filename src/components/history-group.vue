@@ -1,6 +1,6 @@
 <template>
     <!-- История операций -->
-    <section v-if="id_wall" class="history-section">
+    <section class="history-section">
     <div class="header-table">
         <h2 class="section-title">
         <i class="ri-file-list-2-fill"></i> История расходов
@@ -22,34 +22,115 @@
             <i class="ri-money-dollar-circle-line"></i> По сумме
             <i :class="getSortIcon('sum')"></i>
         </button>
+        <button class="sort-btn" @click="sortBy('user')">
+            <i class="ri-user-line"></i> По пользователю
+            <i :class="getSortIcon('user')"></i>
+        </button>
     </div>
 
     <!-- Окно добавления -->
     <div v-if="isAddWindowShow" class="win-background">
         <div class="win-main">
-            <button class="win-close-btn" @click="isAddWindowShow = false"><i class="ri-close-line"></i></button>
+            <button class="win-close-btn" @click="isAddWindowShow = false, resetInput()"><i class="ri-close-line"></i></button>
             <h1>Добавить трату</h1>
-            <input type="text" class="color-input" v-model="data" placeholder="чч мм гггг">
-            <input type="text" class="color-input" v-model="category" placeholder="категория">
+            <input type="date" class="color-input" v-model="data" >
+            <div class="category-select">
+                <input 
+                    type="text" 
+                    class="color-input" 
+                    v-model="category" 
+                    placeholder="Выберите категорию"
+                    @focus="showCategoryDropdown = true"
+                    @blur="onCategoryBlur"
+                >
+                <ul v-show="showCategoryDropdown" class="category-dropdown">
+                    <li 
+                        v-for="(cat, index) in filteredCategories" 
+                        :key="index"
+                        @mousedown="selectCategory(cat)"
+                    >
+                        {{ cat }}
+                    </li>
+                </ul>
+            </div>
             <input type="text" class="color-input" v-model="sum" placeholder="сумма">
+            
+            <div class="category-select">
+                <input 
+                    type="text" 
+                    class="color-input" 
+                    v-model="valuta" 
+                    placeholder="Выберите валюту"
+                    @focus="showValutaDropdown = true"
+                    @blur="onValutaBlur"
+                >
+                <ul v-show="showValutaDropdown" class="category-dropdown">
+                    <li 
+                        v-for="(val, index) in filteredValuta" 
+                        :key="index"
+                        @mousedown="selectValuta(val)"
+                    >
+                        {{ val }}
+                    </li>
+                </ul>
+            </div>
+
             <input type="text" class="inp-description" v-model="Description" placeholder="описание">
-            <button @click="sendData(), isAddWindowShow = false" class="btn-add">добавить</button>
+            <button @click="sendData()" class="btn-add">добавить</button>
+            <h1 class="error">{{error}}</h1>
         </div>
     </div>
     
     <!-- Окно редактирования -->
     <div v-if="isEditWindowShow" class="win-background">
         <div class="win-main">
-            <button class="win-close-btn" @click="isEditWindowShow = false"><i class="ri-close-line"></i></button>
+            <button class="win-close-btn" @click="isEditWindowShow = false, resetInput()"><i class="ri-close-line"></i></button>
             <h1>Редактировать трату</h1>
-            <input type="text" class="color-input" v-model="editingItem.editedCategory" placeholder="категория">
+            <div class="category-select">
+                <input 
+                    type="text" 
+                    class="color-input" 
+                    v-model="editingItem.editedCategory" 
+                    placeholder="Выберите категорию"
+                    @focus="showCategoryDropdown = true"
+                    @blur="onCategoryBlur"
+                >
+                <ul v-show="showCategoryDropdown" class="category-dropdown">
+                    <li 
+                        v-for="(cat, index) in filteredCategories" 
+                        :key="index"
+                        @mousedown="selectCategoryE(cat)"
+                    >
+                        {{ cat }}
+                    </li>
+                </ul>
+            </div>
             <input type="text" class="color-input" v-model="editingItem.editedSum" placeholder="сумма">
+
+            <div class="category-select">
+                <input 
+                    type="text" 
+                    class="color-input" 
+                    v-model="editingItem.editedValuta" 
+                    placeholder="Выберите валюту"
+                    @focus="showValutaDropdown = true"
+                    @blur="onValutaBlur"
+                >
+                <ul v-show="showValutaDropdown" class="category-dropdown">
+                    <li 
+                        v-for="(vul, index) in filteredValuta" 
+                        :key="index"
+                        @mousedown="selectValutaE(vul)"
+                    >
+                        {{ vul }}
+                    </li>
+                </ul>
+            </div>
+
             <input type="text" class="inp-description" v-model="editingItem.editedDescription" placeholder="описание">
             <button @click="saveChanges()" class="btn-add">сохранить</button>
         </div>
     </div>
-    
-    <h1 class="error">{{error}}</h1>
 
     <div class="table-container">
         <div v-if="paginatedExpenses.length === 0" class="yore-histori">
@@ -71,7 +152,7 @@
                 <div class="category">
                     <span class="category-badge">{{ el.category }}</span>
                 </div>                        
-                <p class="amount">{{ el.sum + " ₽"}}</p>
+                <p class="amount">{{ el.sum }} {{ el.valuta }}</p>
                 <p class="description">{{ el.Description }}</p>
                 <div class="actions">
                     <button 
@@ -117,9 +198,6 @@ export default{
     data(){
     return{
 
-        id_wall: null,
-        is_group: null,
-
         sortedIndices: [], // Массив индексов после сортировки
 
         sortField: 'data', 
@@ -127,68 +205,64 @@ export default{
         currentPage: 0,
         itemsPerPage: 10,
 
+        showCategoryDropdown: false,
+        existingCategories: [
+            "Продукты", "Транспорт", "Развлечения", 
+            "Жильё", "Здоровье", "Образование",
+            "Одежда", "Техника"
+        ],
+        showValutaDropdown: false,
+        existingValuta: [
+            "rub", "usd", "eur", 
+            "jpy", "gbp", "chf",
+            "cad", "aud", "nzd"
+        ],
+
         isAddWindowShow: false,
         isEditWindowShow: false,
         error: '',
         expenses: [
-            // {data:'12052020', viweData:'12 мая', category:'Транспорт', sum:'35', Description:'проезд в маршрутке', user: '4erepashka_Pashka'},
-            // {data:'12052020', viweData:'12 мая',  category:'Продукты', sum:'1500', Description:'продукты в 5-чке', user: '4erepashka_Pashka'},
-            // {data:'12052020', viweData:'12 мая', category:'Развлечения', sum:'700', Description:'билеты в кино + попкорн', user: 'Амогус'},
-            // {data:'10052020', viweData:'10 мая', category:'Транспорт', sum:'35', Description:'проезд в маршрутке', user: 'Юля'},
-            // {data:'10052020', viweData:'10 мая', category:'Продукты', sum:'1500', Description:'продукты в 5-чке', user: 'Амогус'},
-            // {data:'10052020', viweData:'10 мая', category:'Развлечения', sum:'700', Description:'билеты в кино + попкорн', user: '4erepashka_Pashka'},
-            // {data:'6052020', viweData:'6 мая', category:'Транспорт', sum:'35', Description:'проезд в маршрутке', user: '4erepashka_Pashka'},
-            // {data:'6052020', viweData:'6 мая', category:'Продукты', sum:'1500', Description:'продукты в 5-чке', user: '4erepashka_Pashka'},
-            // {data:'6052020', viweData:'6 мая', category:'Развлечения', sum:'700', Description:'билеты в кино + попкорн', user: '4erepashka_Pashka'},
-            // {data:'12052020', viweData:'12 мая', category:'Транспорт', sum:'35', Description:'проезд в маршрутке', user: 'Сергей'},
-            // {data:'12052020', viweData:'12 мая',  category:'Продукты', sum:'1500', Description:'продукты в 5-чке', user: '4erepashka_Pashka'},
-            // {data:'12052020', viweData:'12 мая', category:'Развлечения', sum:'700', Description:'билеты в кино + попкорн', user: 'Сергей'},
-            // {data:'10052020', viweData:'10 мая', category:'Транспорт', sum:'35', Description:'проезд в маршрутке', user: 'Сергей'},
-            // {data:'10052020', viweData:'10 мая', category:'Продукты', sum:'1500', Description:'продукты в 5-чке', user: '4erepashka_Pashka'},
-            // {data:'10052020', viweData:'10 мая', category:'Развлечения', sum:'700', Description:'билеты в кино + попкорн', user: '4erepashka_Pashka'},
-            // {data:'6052020', viweData:'6 мая', category:'Транспорт', sum:'35', Description:'проезд в маршрутке', user: '4erepashka_Pashka'},
-            // {data:'6052020', viweData:'6 мая', category:'Продукты', sum:'1500', Description:'продукты в 5-чке', user: '4erepashka_Pashka'},
-            // {data:'6052020', viweData:'6 мая', category:'Развлечения', sum:'700', Description:'билеты в кино + попкорн', user: '4erepashka_Pashka'},
+            {data:'12-05-2020', viweData:'12 мая', category:'Транспорт', sum:'35', valuta: 'rub', Description:'проезд в маршрутке', user: '4erepashka_Pashka'},
+            {data:'12-05-2020', viweData:'12 мая',  category:'Продукты', sum:'1500', valuta: 'rub', Description:'продукты в 5-чке', user: '4erepashka_Pashka'},
+            {data:'12-05-2020', viweData:'12 мая', category:'Развлечения', sum:'700', valuta: 'rub', Description:'билеты в кино + попкорн', user: 'Амогус'},
+            {data:'10-05-2020', viweData:'10 мая', category:'Транспорт', sum:'35', valuta: 'rub', Description:'проезд в маршрутке', user: 'Юля'},
+            {data:'10-05-2020', viweData:'10 мая', category:'Продукты', sum:'1500', valuta: 'rub', Description:'продукты в 5-чке', user: 'Амогус'},
+            {data:'10-05-2020', viweData:'10 мая', category:'Развлечения', sum:'700', valuta: 'rub', Description:'билеты в кино + попкорн', user: '4erepashka_Pashka'},
+            {data:'06-05-2020', viweData:'6 мая', category:'Транспорт', sum:'35', valuta: 'rub', Description:'проезд в маршрутке', user: '4erepashka_Pashka'},
+            {data:'06-05-2020', viweData:'6 мая', category:'Продукты', sum:'1500', valuta: 'rub', Description:'продукты в 5-чке', user: '4erepashka_Pashka'},
+            {data:'06-05-2020', viweData:'6 мая', category:'Развлечения', sum:'700', valuta: 'rub', Description:'билеты в кино + попкорн', user: '4erepashka_Pashka'},
+            {data:'12-05-2020', viweData:'12 мая', category:'Транспорт', sum:'35', valuta: 'rub', Description:'проезд в маршрутке', user: 'Сергей'},
+            {data:'12-05-2020', viweData:'12 мая',  category:'Продукты', sum:'1500', valuta: 'rub', Description:'продукты в 5-чке', user: '4erepashka_Pashka'},
+            {data:'12-05-2020', viweData:'12 мая', category:'Развлечения', sum:'700', valuta: 'rub', Description:'билеты в кино + попкорн', user: 'Сергей'},
+            {data:'10-05-2020', viweData:'10 мая', category:'Транспорт', sum:'35', valuta: 'rub', Description:'проезд в маршрутке', user: 'Сергей'},
+            {data:'10-05-2020', viweData:'10 мая', category:'Продукты', sum:'1500', valuta: 'rub', Description:'продукты в 5-чке', user: '4erepashka_Pashka'},
+            {data:'10-05-2020', viweData:'10 мая', category:'Развлечения', sum:'700', valuta: 'rub', Description:'билеты в кино + попкорн', user: '4erepashka_Pashka'},
+            {data:'06-05-2020', viweData:'6 мая', category:'Транспорт', sum:'35', valuta: 'rub', Description:'проезд в маршрутке', user: '4erepashka_Pashka'},
+            {data:'06-05-2020', viweData:'6 мая', category:'Продукты', sum:'1500', valuta: 'rub', Description:'продукты в 5-чке', user: '4erepashka_Pashka'},
+            {data:'06-05-2020', viweData:'6 мая', category:'Развлечения', sum:'700', valuta: 'rub', Description:'билеты в кино + попкорн', user: '4erepashka_Pashka'},
         ],
         data:'',
         category:'',
         sum:'',
+        valuta: '',
         Description:''
     }
     },
 
-    // Check that user is logined
-    mounted: async function () {
-
-        const path = window.location.pathname;
-
-        // Check, that is group
-        if( path.startsWith('/wall/') ) {
-            let _temp = path.substring(path.lastIndexOf('/') + 1);
-
-            this.id_wall = _temp;
-            this.is_group = true;
-            return;
-        }
-
-        const response = await fetch('/api/wall/my');
-        const status = await response.status;
-        const data = await response.json();
-
-        if (status != 200) { return; }
-
-        for(let i = 0; i < data.length; ++i) {
-            if(data[i].is_group == "f" && data[i].is_public == "f") {
-                this.id_wall = data[i].id;
-                this.is_group = false;
-                break;
-            }
-        }
-
-        this.get_operation();
-    },
-
     computed: {
+
+        filteredCategories() {
+            return this.existingCategories.filter(cat => 
+                cat.toLowerCase().includes(this.category.toLowerCase())
+            );
+        },
+
+        filteredValuta() {
+            return this.existingValuta.filter(val => 
+                val.toLowerCase().includes(this.valuta.toLowerCase())
+            );
+        },
+
         totalPages() {
             return Math.ceil(this.expenses.length / this.itemsPerPage);
         },
@@ -226,53 +300,55 @@ export default{
     },
     
     methods:{
-        async get_operation() {
 
-            console.log("THIS");
-            console.log(this.id_wall);
-
-            const response = await fetch(`/api/wall/operations?id_wall=${this.id_wall}`);
-            const status = await response.status;
-            const data = await response.json();
-
-            if (status != 200) { return; }
-
-            if(data.length == 0) {
-                return;
-            }
-
-            for(let i = 0; i < data.length; i++) {
-
-                const obj = {
-                    data:'12052020', 
-                    viweData:'null', 
-                    category:'null', 
-                    sum: data[i].value, 
-                    Description:'null', 
-                    user: 'null'
-                };
-
-                expenses.append(obj);
-            }
-
-            
+        selectCategory(cat) {
+            this.category = cat;
+            this.showCategoryDropdown = false;
         },
 
+        selectCategoryE(cat) {
+            this.editingItem.editedCategory = cat;
+            this.showCategoryDropdown = false;
+        },
+
+        onCategoryBlur() {
+            setTimeout(() => {
+                this.showCategoryDropdown = false;
+            }, 200);
+        },
+
+        selectValuta(val) {
+            this.valuta = val;
+            this.showValutaDropdown = false;
+        },
+
+        selectValutaE(val) {
+            this.editingItem.editedValuta = val;
+            this.showValutaDropdown = false;
+        },
+
+        onValutaBlur() {
+            setTimeout(() => {
+                this.showValutaDropdown = false;
+            }, 200);
+        },
 
         openEditWindow(index) {
             this.editingIndex = index;
             this.editingItem = {...this.expenses[index]};
             this.editingItem.editedCategory = this.editingItem.category;
             this.editingItem.editedSum = this.editingItem.sum;
+            this.editingItem.editedValuta = this.editingItem.valuta;
             this.editingItem.editedDescription = this.editingItem.Description;
             this.isEditWindowShow = true;
         },
 
         saveChanges() {
             const item = this.expenses[this.editingIndex];
-            
+        
             item.category = this.editingItem.editedCategory;
             item.sum = this.editingItem.editedSum;
+            item.valuta = this.editingItem.editedValuta;
             item.Description = this.editingItem.editedDescription;
             
             this.isEditWindowShow = false;
@@ -295,7 +371,7 @@ export default{
             }
         },
 
-        async sendData(){
+        sendData(){
             let dmont = '';
             let months = [
             'января',
@@ -311,14 +387,11 @@ export default{
             'ноября',
             'декабря',
             ];
-            if(this.data == '' && this.category == '' && this.sum == ''){
+            if(this.data == '' && this.category == '' && this.sum == '' && this.valuta == ''){
             this.error='введите данные'
             return;
             } else if(this.data == ''){
             this.error='дата не введена'
-            return;
-            } else if(this.data.length != 10){
-            this.error='дата введена некорректно'
             return;
             }else if(this.category == ''){
             this.error='не указанна категория'
@@ -326,75 +399,32 @@ export default{
             } else if(this.sum == ''){
             this.error='не введена сумма'
             return;
-            }
-
-            let num = this.data;
-            let charMas = Array.from(num);
-            charMas[2] = "";
-            charMas[5] = "";
-            let st = charMas.join('');
-            num = st;
-
-            let year = parseInt(num.substring(4,8))
-            if( /^\d+$/.test(year) == 0 || year < 999){
-            this.error='дата введена некорректно'
+            }else if(this.valuta == ''){
+            this.error='не выброна валюта'
             return;
             }
 
-            let day = parseInt(num.substring(0,2));
-            let month = parseInt(num.substring(2,4));
-
-            if(((day > 31 || day < 0) 
-            || ((day > 28 || day < 0) && month == 2)) 
-            || (month > 13 || month < 0)){
-            this.error='дата введена некорректно'
-            return;
-            } else {
+            let day = this.data.substring(8,10);
             for(let i = 0; i < 12; i++){
-                if(month - 1 == i) dmont = months[i];
+                if(parseInt(this.data.substring(5,7)) - 1 == i) dmont = months[i];
             }
-
-            if((day < 32 && month != 2 && day > 0) || (day < 29 && month == 2 && day > 0)){
             dmont = day + " " + dmont;
-            }
-            }
 
-            num = parseInt(num);
-
-            const form = new FormData();
-            form.append("value", this.sum);
-            form.append("id_currency", '1');
-            form.append("id_wall", this.id_wall);
-            // form.append("time", num);
-
-            const requestOptions = {
-                method: 'POST',
-                body: form,
-            };  
-
-            console.log("PRINT");
-
-            const response = await fetch("/api/opreation/create", requestOptions);
-            const status = await response.status;
-            const data = await response.json();
-
-            console.log(data);
 
             this.error = '';
             this.expenses.push({
-                data: num,
-                viweData: dmont,
-                category: this.category,
-                sum: this.sum,
-                Description: this.Description,
-                isEditing: false,
-                editedName: this.category
+            data: this.data,
+            viweData: dmont,
+            category: this.category,
+            sum: this.sum,
+            valuta: this.valuta,
+            Description: this.Description,
+            isEditing: false,
+            editedName: this.category
             })
 
-            
-
-
             if(this.error == ''){
+                this.isAddWindowShow = false;
                 this.resetInput();
             }
             
@@ -405,30 +435,14 @@ export default{
             this.category = '';
             this.sum = '';
             this.Description = '';
+            this.valuta = '';
         },
 
-        toggleEdit(index) {
-            if (this.expenses[index].isEditing) {
-            this.saveChanges(index);
-            } else {
-            this.expenses[index].editedCategory = this.expenses[index].category;
-            this.expenses[index].editedSum = this.expenses[index].sum;
-            this.expenses[index].editedDescription = this.expenses[index].Description;            
-            this.expenses[index].isEditing = true;
-            }
-        },
+        
 
         
         removeExpense(index) {
             this.expenses.splice(index, 1);
-        },
-
-        handleKeyDown(e) {
-            if (e.key === 'ArrowLeft') {
-                this.prevPage();
-            } else if (e.key === 'ArrowRight') {
-                this.nextPage();
-            }
         },
 
         // Метод сортировки
@@ -451,9 +465,9 @@ export default{
 
     },
 
-    // mounted() {
-    //     window.addEventListener('keydown', this.handleKeyDown);
-    // },
+    mounted() {
+        window.addEventListener('keydown', this.handleKeyDown);
+    },
     beforeDestroy() {
         window.removeEventListener('keydown', this.handleKeyDown);
     }

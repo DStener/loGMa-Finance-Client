@@ -1,20 +1,30 @@
 <template>
-
     <balance />
+    <group-managment v-if="isAuth === true && isAdmin === true && isGroup === true"/>
     <analytics />
     <history />
 </template>
 <script>
-import balance from '../components/balance.vue'
+import balance from '@/components/balance.vue';
 import analytics from '../components/analytics.vue'
 import history from '../components/history.vue'
+import groupManagment from '@/components/group-managment.vue';
+
 
 export default {
     components: {
         balance,
         analytics,
-        history
+        history,
+        groupManagment,
     },
+    data(){
+        return{
+            isAuth: true,
+            isAdmin: true,
+            isGroup: true
+        }
+    }
 
 }
 </script>

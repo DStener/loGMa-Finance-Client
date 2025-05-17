@@ -12,6 +12,7 @@
   --border-radius: 0.5rem;
   --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   --transition: all 0.3s ease;
+  --indentation-margin: 20px;
 }
 
 * {
@@ -30,6 +31,20 @@
   margin: 0;
   font-weight: normal;
 }
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+input[type=number]{
+    -moz-appearance: textfield;
+}
+
+.notransition * { 
+  transition: none !important; 
+} 
 
 /* color palette from <https://github.com/vuejs/theme> */
 :root {
@@ -132,15 +147,80 @@ body {
 }
 
 .block {
-  width: 100%;
-  height: 70px;
+  max-width: calc(100vw - 2rem);
+  height: min-content;
   border-radius: 0.5rem;
+  padding: 20px;
 }
 
 .color-back {
   background-color: var(--color-background-soft);
 }
 
+.div-adaptive-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.btn {
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--border-radius);
+  gap: 0.3rem;
+  font-size: 0.9rem;
+  transition: var(--transition);
+  border: none;
+  height: 40px;
+}
+
+.btn-small {
+  padding: 0.6rem;
+  border-radius: var(--border-radius);
+  gap: 0.3rem;
+  font-size: 0.9rem;
+  transition: var(--transition);
+  border: none;
+}
+
+.center {
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 1rem;
+}
+
+.absolute {
+  position: relative;
+}
+
+.anchor {
+  position: absolute;
+}
+
+.anchor.top {
+  top: var(--indentation-margin);
+}
+
+.anchor.bottom {
+  bottom: var(--indentation-margin);
+}
+
+.anchor.right {
+  right: var(--indentation-margin);
+}
+
+.anchor.left {
+  left: var(--indentation-margin);
+}
+
+.green-fill {
+  background-color: var(--primary);
+  color: white;
+}
+
+.green {
+  background-color: rgba(0, 0, 0, 0);
+  border: thin solid var(--primary);
+  color: var(--primary);
+}
 
 .container {
   max-width: 1200px;
@@ -155,6 +235,46 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
+}
+
+input {
+  width: 100%;
+  padding: 12px 15px;
+  border-radius: 8px;
+  border: none;
+  font-size: 1rem;
+  background-color: var(--color-background-mute);
+  color: var(--color-text);
+  height: 47px;
+  margin: 0px 0px 20px 0;
+}
+
+input:not(input[type="submit"]) {
+  border: 1px solid #00000057;
+}
+
+select {
+  background-color: var(--color-background-mute);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 1rem;
+  cursor: pointer;
+  width: 100%;
+  transition: border-color 0.3s ease;
+}
+
+select option {
+  background-color: var(--color-background-mute);
+  color: var(--color-text);
+  padding: 8px;
+}
+
+
+select option:checked {
+  background-color: var(--primary-color);
+  color: white;
 }
 
 @media (max-width: 576px) {

@@ -315,3 +315,64 @@ label {
         justify-content: center;
     }
 }
+
+.div-groups {
+    display: flex;
+    flex-direction: column;
+    padding-top: 1.5rem;
+    gap: 1.5rem;
+}
+
+.wall-groups {
+    display: flex;
+    flex-direction: row;
+    text-decoration: none;
+    color: var(--color-text);
+}
+
+.wall-groups .num {
+    min-width: 40px;
+}
+
+.wall-groups .name {
+    text-overflow: ellipsis; 
+    white-space: nowrap; 
+    overflow: hidden;
+}
+
+.user-group-avatar {
+    width: 1.7rem;
+    height: 1.7rem;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.lsit-avatars {
+    margin-left: auto;
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+}
+
+.no-groups {
+    width: 100%;
+    text-align: center;
+    opacity: 0.5;
+    padding-top: 3rem;
+    padding-bottom: 1rem;
+    /* padding: 0.5rem 0; */
+}
+
+.accent-icon {
+    font-size: 10rem;
+    color: var(--secondary);
+}
+
+.create-form {
+    display: flex;
+    flex-direction: column;
+}
+
+/* .create-form input {
+    width: 100%;
+} */
