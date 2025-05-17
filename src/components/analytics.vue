@@ -16,14 +16,14 @@
                 class="pagination-btn" @click="isWindowShow2 = true">
                     <i class="ri-add-fill"></i>
                 </button>
-                <button class="pagination-btn" @click="toggleChartExpand">
+                <!-- <button class="pagination-btn" @click="toggleChartExpand">
                     <i class="fas" :class="isChartExpanded ? 'ri-arrow-down-s-line' : 'ri-arrow-up-s-line'"></i>
-                </button>
-                <button 
+                </button> -->
+                <!-- <button 
                 v-if="(showButton === true) || (showButton2 ===true && isAdmin === true)"
                 class="pagination-btn" @click="isWindowShowCategoryManage = true">
                     <i class="ri-progress-6-line"></i>
-                </button>
+                </button> -->
             </div>
         </div>
 
@@ -37,15 +37,11 @@
                 <h1>Добавить категорию</h1>
                 <input type="text" v-model="categoryName" placeholder="Название">
                 <input type="number" class="color-input" v-model="categoryLimit" placeholder="Задайте лимит">
-                <button @click="addCategory()" className="btn-add">Добавить</button>
+                <button @click="addCategory" className="btn-add">Добавить</button>
             </div>
         </div>
         
         <div class="block-chart">
-            <div className="chart-container" id="chart">            
-                <canvas ref="chartCanvas" className="chart-img"></canvas>
-            </div>
-        
             <div className="chart-legend">
                 <div className="legend-header">
                     <h3>Распределение расходов</h3>
@@ -89,6 +85,9 @@ export default {
     },
     data() {
         return {
+
+            idWall: null,
+            
             isAdmin: false,
             categoryName: "",
             categoryLimit: null,
@@ -117,8 +116,21 @@ export default {
         }
         
     },
-    mounted() {
-        this.loadImageToCanvas();
+    
+    mounted: async function() {
+
+        const target = (window.location.pathname == "/my")? "/api/wall/my" : "/api/wall/walls";
+
+        const response = await fetch(target);
+        const status = await response.status;
+        const data = await response.json();
+
+        if(status != 200) { return; }
+
+        if(window.location.pathname == "/my") {
+
+            this.idWall = data[0].id;
+        }
     },
 
     methods: {
@@ -130,7 +142,9 @@ export default {
                 block.style.display = 'none';
             }
         },
-        addCategory() {
+        async addCategory() {
+
+
             if (this.categoryName === "") {
                 alert('Введите название категории');
                 return;
@@ -140,7 +154,23 @@ export default {
                 alert('Лимит должен быть выше нуля');
                 return;
             }
+
+
+            const form = new FormData();
+            form.append("icon", "1");
+            form.append("name", this.categoryName);
+            form.append("id_wall", this.idWall);
+            form.append("limits", this.categoryLimit);
+            
+
+            const response = await fetch("/api/category/create", {method: "POST", body: form});
+            const status = await response.status;
+            const data = await response.json();
+
+            if(status != 200) { return; }
+
             this.isWindowShow2 = false; //это после отправки апи добавить
+            location.reload();
         },
 
         loadImageToCanvas() {

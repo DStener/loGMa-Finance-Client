@@ -20,17 +20,6 @@
                 <router-link v-if="isAuth === 1" to="/my" class="nav-link">
                     <i class="ri-history-line"></i> Мой бюджет
                 </router-link>
-
-                <details v-if="isAuth === 1" class="nav-details">
-                    <summary class="nav-summary">
-                        <i class="ri-group-line"></i> Группы
-                    </summary>
-                    <div class="nav-dropdown">
-                        <router-link v-for="group in groups" to="/groups" class="nav-link dropdown-link">
-                            {{ group.name }}
-                        </router-link>
-                    </div>
-                </details>
             </nav>
 
             <div class="header-right">

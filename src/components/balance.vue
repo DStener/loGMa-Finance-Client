@@ -29,18 +29,6 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                <div class="summary-period">
-                                    <button
-                                        v-for="period in periods"
-                                        :key="period.value"
-                                        class="period-btn"
-                                        :class="{ activePeriod: activePeriod === period.value }"
-                                        @click="setPeriod(period.value)"
-                                    >
-                                        {{ period.label }}
-                                    </button>
-                                </div>
                             </div>
 
                             <div class="finance-card">
@@ -98,6 +86,9 @@ import '@glidejs/glide/dist/css/glide.core.min.css'
 export default {
     data() {
         return {
+
+            idWall: null,
+
             activePeriod: 'month',
             periods: [
                 { value: 'week', label: 'Неделя' },
@@ -136,15 +127,45 @@ export default {
             glide: null
         }
     },
-    mounted() {
-        this.initGlide()
+    // mounted() {
+    //     this.initGlide()
+    // },
+
+    mounted: async function() {
+
+        const target = (window.location.pathname == "/my")? "/api/wall/my" : "/api/wall/walls";
+
+        const response = await fetch(target);
+        const status = await response.status;
+        const data = await response.json();
+
+        if(status != 200) { return; }
+
+        if(window.location.pathname == "/my") {
+
+            console.log(data);
+
+            this.idWall = data[0].id;
+        }
+
+        this.configCurrency();
     },
+
     beforeDestroy() {
         if (this.glide) {
             this.glide.destroy()
         }
     },
     methods: {
+
+        async configCurrency() {
+            const response = await fetch(`/api/wall/sum?id_wall=${this.idWall}`);
+            const status = await response.status;
+            const data = await response.json();
+
+            console.log(data);
+        },
+
         setPeriod(period) {
             this.activePeriod = period
         },

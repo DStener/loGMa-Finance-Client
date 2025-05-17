@@ -20,7 +20,8 @@
     position: absolute;
     padding: 30px;
     width: 430px;
-    height: 400px;
+    height: min-content;
+    max-height: calc(100vh - 10rem);
     overflow-y: auto;
     background-color: var(--color-background-soft);
     border-radius: 1rem;
@@ -46,11 +47,6 @@
         bottom: 0;
         width: 100%;
         height: min-content;
-
-        max-height: calc(100vh - 10rem);
-
-
-
         border-radius: 1rem 1rem 0 0;
     }
 }

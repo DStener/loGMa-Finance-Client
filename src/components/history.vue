@@ -49,7 +49,7 @@
                     </li>
                 </ul>
             </div>
-            <input type="text" class="color-input" v-model="sum" placeholder="сумма">
+            <input type="number" class="color-input" v-model="sum" placeholder="сумма">
             
             <div class="category-select">
                 <input 
@@ -192,6 +192,8 @@ export default{
     data(){
     return{
 
+        idWall: null,
+
         sortedIndices: [], // Массив индексов после сортировки
 
         sortField: 'data', 
@@ -200,40 +202,32 @@ export default{
         itemsPerPage: 10,
 
         showCategoryDropdown: false,
-        existingCategories: [
-            "Продукты", "Транспорт", "Развлечения", 
-            "Жильё", "Здоровье", "Образование",
-            "Одежда", "Техника"
-        ],
+        existingCategories: [],
         showValutaDropdown: false,
-        existingValuta: [
-            "rub", "usd", "eur", 
-            "jpy", "gbp", "chf",
-            "cad", "aud", "nzd"
-        ],
+        existingValuta: [],
 
         isAddWindowShow: false,
         isEditWindowShow: false,
         error: '',
         expenses: [
-            {data:'12-05-2020', viweData:'12 мая', category:'Транспорт', sum:'35', valuta: 'rub', Description:'проезд в маршрутке', user: '4erepashka_Pashka'},
-            {data:'12-05-2020', viweData:'12 мая',  category:'Продукты', sum:'1500', valuta: 'rub', Description:'продукты в 5-чке', user: '4erepashka_Pashka'},
-            {data:'12-05-2020', viweData:'12 мая', category:'Развлечения', sum:'700', valuta: 'rub', Description:'билеты в кино + попкорн', user: 'Амогус'},
-            {data:'10-05-2020', viweData:'10 мая', category:'Транспорт', sum:'35', valuta: 'rub', Description:'проезд в маршрутке', user: 'Юля'},
-            {data:'10-05-2020', viweData:'10 мая', category:'Продукты', sum:'1500', valuta: 'rub', Description:'продукты в 5-чке', user: 'Амогус'},
-            {data:'10-05-2020', viweData:'10 мая', category:'Развлечения', sum:'700', valuta: 'rub', Description:'билеты в кино + попкорн', user: '4erepashka_Pashka'},
-            {data:'06-05-2020', viweData:'6 мая', category:'Транспорт', sum:'35', valuta: 'rub', Description:'проезд в маршрутке', user: '4erepashka_Pashka'},
-            {data:'06-05-2020', viweData:'6 мая', category:'Продукты', sum:'1500', valuta: 'rub', Description:'продукты в 5-чке', user: '4erepashka_Pashka'},
-            {data:'06-05-2020', viweData:'6 мая', category:'Развлечения', sum:'700', valuta: 'rub', Description:'билеты в кино + попкорн', user: '4erepashka_Pashka'},
-            {data:'12-05-2020', viweData:'12 мая', category:'Транспорт', sum:'35', valuta: 'rub', Description:'проезд в маршрутке', user: 'Сергей'},
-            {data:'12-05-2020', viweData:'12 мая',  category:'Продукты', sum:'1500', valuta: 'rub', Description:'продукты в 5-чке', user: '4erepashka_Pashka'},
-            {data:'12-05-2020', viweData:'12 мая', category:'Развлечения', sum:'700', valuta: 'rub', Description:'билеты в кино + попкорн', user: 'Сергей'},
-            {data:'10-05-2020', viweData:'10 мая', category:'Транспорт', sum:'35', valuta: 'rub', Description:'проезд в маршрутке', user: 'Сергей'},
-            {data:'10-05-2020', viweData:'10 мая', category:'Продукты', sum:'1500', valuta: 'rub', Description:'продукты в 5-чке', user: '4erepashka_Pashka'},
-            {data:'10-05-2020', viweData:'10 мая', category:'Развлечения', sum:'700', valuta: 'rub', Description:'билеты в кино + попкорн', user: '4erepashka_Pashka'},
-            {data:'06-05-2020', viweData:'6 мая', category:'Транспорт', sum:'35', valuta: 'rub', Description:'проезд в маршрутке', user: '4erepashka_Pashka'},
-            {data:'06-05-2020', viweData:'6 мая', category:'Продукты', sum:'1500', valuta: 'rub', Description:'продукты в 5-чке', user: '4erepashka_Pashka'},
-            {data:'06-05-2020', viweData:'6 мая', category:'Развлечения', sum:'700', valuta: 'rub', Description:'билеты в кино + попкорн', user: '4erepashka_Pashka'},
+            // {data:'12-05-2020', viweData:'12 мая', category:'Транспорт', sum:'35', valuta: 'rub', Description:'проезд в маршрутке', user: '4erepashka_Pashka'},
+            // {data:'12-05-2020', viweData:'12 мая',  category:'Продукты', sum:'1500', valuta: 'rub', Description:'продукты в 5-чке', user: '4erepashka_Pashka'},
+            // {data:'12-05-2020', viweData:'12 мая', category:'Развлечения', sum:'700', valuta: 'rub', Description:'билеты в кино + попкорн', user: 'Амогус'},
+            // {data:'10-05-2020', viweData:'10 мая', category:'Транспорт', sum:'35', valuta: 'rub', Description:'проезд в маршрутке', user: 'Юля'},
+            // {data:'10-05-2020', viweData:'10 мая', category:'Продукты', sum:'1500', valuta: 'rub', Description:'продукты в 5-чке', user: 'Амогус'},
+            // {data:'10-05-2020', viweData:'10 мая', category:'Развлечения', sum:'700', valuta: 'rub', Description:'билеты в кино + попкорн', user: '4erepashka_Pashka'},
+            // {data:'06-05-2020', viweData:'6 мая', category:'Транспорт', sum:'35', valuta: 'rub', Description:'проезд в маршрутке', user: '4erepashka_Pashka'},
+            // {data:'06-05-2020', viweData:'6 мая', category:'Продукты', sum:'1500', valuta: 'rub', Description:'продукты в 5-чке', user: '4erepashka_Pashka'},
+            // {data:'06-05-2020', viweData:'6 мая', category:'Развлечения', sum:'700', valuta: 'rub', Description:'билеты в кино + попкорн', user: '4erepashka_Pashka'},
+            // {data:'12-05-2020', viweData:'12 мая', category:'Транспорт', sum:'35', valuta: 'rub', Description:'проезд в маршрутке', user: 'Сергей'},
+            // {data:'12-05-2020', viweData:'12 мая',  category:'Продукты', sum:'1500', valuta: 'rub', Description:'продукты в 5-чке', user: '4erepashka_Pashka'},
+            // {data:'12-05-2020', viweData:'12 мая', category:'Развлечения', sum:'700', valuta: 'rub', Description:'билеты в кино + попкорн', user: 'Сергей'},
+            // {data:'10-05-2020', viweData:'10 мая', category:'Транспорт', sum:'35', valuta: 'rub', Description:'проезд в маршрутке', user: 'Сергей'},
+            // {data:'10-05-2020', viweData:'10 мая', category:'Продукты', sum:'1500', valuta: 'rub', Description:'продукты в 5-чке', user: '4erepashka_Pashka'},
+            // {data:'10-05-2020', viweData:'10 мая', category:'Развлечения', sum:'700', valuta: 'rub', Description:'билеты в кино + попкорн', user: '4erepashka_Pashka'},
+            // {data:'06-05-2020', viweData:'6 мая', category:'Транспорт', sum:'35', valuta: 'rub', Description:'проезд в маршрутке', user: '4erepashka_Pashka'},
+            // {data:'06-05-2020', viweData:'6 мая', category:'Продукты', sum:'1500', valuta: 'rub', Description:'продукты в 5-чке', user: '4erepashka_Pashka'},
+            // {data:'06-05-2020', viweData:'6 мая', category:'Развлечения', sum:'700', valuta: 'rub', Description:'билеты в кино + попкорн', user: '4erepashka_Pashka'},
         ],
         data:'',
         category:'',
@@ -243,8 +237,30 @@ export default{
     }
     },
 
-    computed: {
 
+    mounted: async function() {
+
+        const target = (window.location.pathname == "/my")? "/api/wall/my" : "/api/wall/walls";
+
+        const response = await fetch(target);
+        const status = await response.status;
+        const data = await response.json();
+
+        if(status != 200) { return; }
+
+        if(window.location.pathname == "/my") {
+
+            console.log(data);
+
+            this.idWall = data[0].id;
+        }
+
+        this.getCurrency();
+        this.uppdateListCatgory();
+        this.listOperation();
+    },
+
+    computed: {
         filteredCategories() {
             return this.existingCategories.filter(cat => 
                 cat.toLowerCase().includes(this.category.toLowerCase())
@@ -295,6 +311,62 @@ export default{
     
     methods:{
 
+        async getCurrency() {
+            const response = await fetch(`/api/wall/g_curr`);
+            const status = await response.status;
+            const data = await response.json();
+
+            console.log(data);
+        },
+
+        async uppdateListCatgory() {
+
+            const response = await fetch(`/api/wall/c_wall?id_wall=${this.idWall}`);
+            const status = await response.status;
+            const data = await response.json();
+
+            console.log(data);
+
+
+            if ( status == 200 ) {   
+                this.existingCategories = [];
+
+                for(let i = 0; i < data.length; ++i) {
+                    this.existingCategories.push(data[0].name);
+                }
+            }
+
+        },
+
+        async listOperation() {
+
+            const response = await fetch(`/api/wall/operations?id_wall=${this.idWall}`);
+            const status = await response.status;
+            const data = await response.json();
+
+            console.log(data);
+
+            if(status != 200) { return; }
+
+            console.log(data[0].time);
+
+            for(let i = 0; i < data.length; ++i) {
+                this.expenses.push({
+                    id: data[i].id,
+                    data: data[i].time.substring(0, 10),
+                    viweData: "",
+                    category: "",
+                    sum: data[i].value,
+                    valuta: data[i].iso_currency,
+                    Description: data[i].description,
+                    user: data[i].id_user,
+                });
+            }
+
+            // {data:'10-05-2020', viweData:'10 мая', category:'Продукты', sum:'1500', valuta: 'rub', Description:'продукты в 5-чке', user: '4erepashka_Pashka'},
+            
+        },
+
         selectCategory(cat) {
             this.category = cat;
             this.showCategoryDropdown = false;
@@ -338,6 +410,9 @@ export default{
         },
 
         saveChanges() {
+
+            console.log("MAY BE");
+
             const item = this.expenses[this.editingIndex];
         
             item.category = this.editingItem.editedCategory;
@@ -365,7 +440,7 @@ export default{
             }
         },
 
-        sendData(){
+        async sendData(){
             let dmont = '';
             let months = [
             'января',
@@ -405,17 +480,33 @@ export default{
             dmont = day + " " + dmont;
 
 
+            // NEW OPERATION ///////////////////////////
+
+            const form = new FormData();
+            
+            form.append("value", this.sum);
+            form.append("description", this.Description);
+            form.append("iso_currency", this.valuta);
+            form.append("time", this.data);
+            form.append("id_wall", this.idWall);
+
             this.error = '';
             this.expenses.push({
-            data: this.data,
-            viweData: dmont,
-            category: this.category,
-            sum: this.sum,
-            valuta: this.valuta,
-            Description: this.Description,
-            isEditing: false,
-            editedName: this.category
+                data: this.data,
+                viweData: dmont,
+                category: this.category,
+                sum: this.sum,
+                valuta: this.valuta,
+                Description: this.Description,
+                isEditing: false,
+                editedName: this.category
             })
+
+            const response = await fetch(`/api/opreation/create`, {method: "POST", body: form});
+            const status = await response.status;
+            const data = await response.json();
+
+            console.log
 
             if(this.error == ''){
                 this.isAddWindowShow = false;
@@ -459,9 +550,9 @@ export default{
 
     },
 
-    mounted() {
-        window.addEventListener('keydown', this.handleKeyDown);
-    },
+    // mounted() {
+    //     window.addEventListener('keydown', this.handleKeyDown);
+    // },
     beforeDestroy() {
         window.removeEventListener('keydown', this.handleKeyDown);
     }

@@ -162,7 +162,8 @@ body.dark .stat-label {
 }
 
 .chart-legend {
-    min-width: 320px;
+    /* min-width: calc(100%)s; */
+    width: 100%;
     background-color: var(--color-background-soft);
     border-radius: var(--border-radius);
     padding: 20px;

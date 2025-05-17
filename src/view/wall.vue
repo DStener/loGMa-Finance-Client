@@ -1,4 +1,5 @@
 <template>
+    <balance />
     <group-managment v-if="isAuth === true && isAdmin === true && isGroup === true"/>
     <analytics />
     <history />

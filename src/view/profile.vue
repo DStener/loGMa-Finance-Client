@@ -139,6 +139,7 @@
 
             <form calss="create-form" id="form-create-group" @submit="createGroup">
                 <input class="form-input" type="text" name="name" placeholder="Введите название группы"/>
+                <input class="form-input" type="number" name="lim" placeholder="Введите лимит бюджета группы"/>
                 <input type="submit" class="btn green-fill">
             </form>
         </div>

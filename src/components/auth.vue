@@ -140,6 +140,7 @@ export default {
             if(status != 200 && status != 201) {
                 this.errorMessages = data.message;
                 console.log(data)
+                return;
             };
 
             document.location.pathname = redirect;

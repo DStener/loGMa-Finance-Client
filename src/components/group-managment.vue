@@ -17,7 +17,6 @@
                         <button @click="ban" class="ban-btn">Исключить</button>
                     </div>
                 </div>
-                
             </div>
         </div>
         <!-- <span class="nav-link"><i class="ri-file-edit-line"></i> Редактировать бюджет</span> -->
